@@ -63,11 +63,114 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head2 moon_test_one
 
+    moon_test_one(
+        instance  => 0,
+        meth      => 0,
+        action      => 0,
+        args      => { },
+        args_list => 0,
+        test      => 0,
+        expected  => 1,
+    );
+
 =cut
 
 sub moon_test_one {
+    my %instruction = validate_with(
+        params => \@_,
+        spec   => {
+            instance  => 0,
+            meth      => 0,
+            action    => 0,
+            args      => { default => {} },
+            args_list => 0,
+            test      => 0,
+            expected  => 1,
+            catch     => 0,
+        }
+    );
 
+    my @test = ();
+    my $test_name = '';
+    my @expected = $instruction{expected};
 
+    if ($instruction{catch}) {
+        $test_name = 'catch';
+        exists $instruction{test} or $instruction{test} = 'like';
+        eval { _run_the_code(\%instruction) }
+        @test = $@;
+    }
+    else {
+        @test = _run_the_code(\%instruction);
+        $test_name = shift @test;
+    }
+    
+    given ( $instruction{test} ) {
+        when (/ref/){
+            return is_deeply( $test[0], $expected[0], "$test_name is ref - is_deeply");
+        }
+        when (/scalar/){
+            my $txt = $expected[0] // 'undef';
+            return is($test[0], $txt, "$test_name is scalar - is - $txt");
+        }
+        when (/hash/){
+            return is_deeply( %{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
+        }
+        when (/array/){
+            return is_deeply( \@test, \@expected, "$test_name is array - reference - is_deeply");
+        }
+        when (/obj/){
+            return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
+        }
+        when (/like/) {
+            return like($test[0], $expected[0], "$test_name is like - $expected[0]"); 
+        }
+        when (/render/){
+            return render_me(
+                instance     => $test[0], 
+                expected     => $test[0],
+            );
+        }
+        default {
+            diag explain \%instruction;
+            ok(0);
+        }
+    }
+}
+
+=head2 _run_the_code
+
+    _run_the_code({
+        instance => ''
+        action => '',
+        ...
+        meth => '',
+    });
+
+=cut
+
+sub _run_the_code {
+    my $instructions = shift;
+
+    my $test_name;
+    if (my $action = $instruction->{action}) {
+        $test_name = $action;
+        return defined $instruction->{args_list}
+          ? ($test_name, $instruction->{instance}->$action(@{ $instruction->{args} }))
+          : ($test_name, $instruction->{instance}->$action( $instruction->{args} ));
+    }
+    elsif(my $meth = $instruction->{meth}) {
+        my $cv = svref_2object($meth);
+        my $gv = $cv->GV;
+        my $test_name = $gv->NAME;
+        return defined $instruction->{args_list}
+          ? ($test_name, $meth->( @{ $instruction->{args} } ))
+          : ($test_name, $meth->( $instruction->{args} ));
+    }
+    else {
+        diag explain $instruction;
+        die;
+    }
 }
 
 =head2 render_me
