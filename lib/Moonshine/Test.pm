@@ -69,7 +69,7 @@ if you don't export anything, such as for a purely object-oriented module.
     moon_test_one(
         instance  => 0,
         meth      => 0,
-        function  => 0,
+        func  => 0,
         args      => { },
         args_list => 0,
         test      => 0,
@@ -84,7 +84,7 @@ sub moon_test_one {
         spec   => {
             instance  => 0,
             meth      => 0,
-            function  => 0,
+            func  => 0,
             args      => { default => {} },
             args_list => 0,
             test      => 0,
@@ -153,7 +153,7 @@ Or test a function..
 
     render_me(
         instance => $instance,
-        function => 'div',
+        func => 'div',
         args     => { data => 'echo' },
         expected => '<div>echo</div>',
     );
@@ -165,7 +165,7 @@ sub render_me {
         params => \@_,
         spec   => {
             instance => 1,
-            function => 0,
+            func => 0,
             args     => { default => {} },
             expected => { type => SCALAR },
         }
@@ -181,7 +181,7 @@ sub render_me {
 
     _run_the_code({
         instance => ''
-        function => '',
+        func => '',
         ...
         meth => '',
     });
@@ -192,17 +192,17 @@ sub _run_the_code {
     my $instruction = shift;
 
     my $test_name;
-    if (my $function = $instruction->{function}) {
-        $test_name = "function: ${function}";
+    if (my $func = $instruction->{func}) {
+        $test_name = "function: ${func}";
         return defined $instruction->{args_list}
-          ? ($test_name, $instruction->{instance}->$function(@{ $instruction->{args} }))
-          : ($test_name, $instruction->{instance}->$function( $instruction->{args} ));
+          ? ($test_name, $instruction->{instance}->$func(@{ $instruction->{args} }))
+          : ($test_name, $instruction->{instance}->$func( $instruction->{args} ));
     }
     elsif(my $meth = $instruction->{meth}) {
         my $cv = svref_2object($meth);
         my $gv = $cv->GV;
         my $meth_name = $gv->NAME;
-        $test_name = "meth: ${meth_name}";
+        $test_name = "method: ${meth_name}";
         return defined $instruction->{args_list}
           ? ($test_name, $meth->( @{ $instruction->{args} } ))
           : ($test_name, $meth->( $instruction->{args} ));
@@ -223,8 +223,10 @@ sub _run_the_code {
 =cut
 
 sub sunrise {
+    my $done_testing = done_testing(shift);
+    diag explain $done_testing;
     diag sprintf('                         
-                                    %s
+                                   %s
             ^^                   @@@@@@@@@
        ^^       ^^            @@@@@@@@@@@@@@@
                             @@@@@@@@@@@@@@@@@@              ^^
@@ -234,8 +236,8 @@ sub sunrise {
    -      --      -- -- --  ------------- ----  -     ---    - ---  - --
    -  --     -         -      ------  -- ---       -- - --  -- -
  -  -       - -      -           -- ------  -      --  -             --
-       -             -        -      -      --   -             -', '\o/');
-    return done_testing();
+       -             -        -      -      --   -             -', shift // ' \o/ ');
+    return $done_testing;
 }
 
 =head1 AUTHOR

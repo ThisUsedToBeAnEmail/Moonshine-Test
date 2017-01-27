@@ -32,7 +32,7 @@ check_test(
     sub {
         render_me(
             instance => $instance,
-            function => 'p',
+            func => 'p',
             args => {
                 data => 'test',
             },
@@ -67,7 +67,7 @@ check_test(
     sub {
         render_me(
             instance => $instance,
-            function => 'broken',
+            func => 'broken',
             args => {
                 class => 'test',
                 data  => 'test',

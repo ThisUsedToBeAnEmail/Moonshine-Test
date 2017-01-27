@@ -33,7 +33,7 @@ check_test(
         moon_test_one(
             test => 'render_me',
             instance => $instance,
-            function => 'p',
+            func => 'p',
             args => {
                 data => 'test',
             },
@@ -49,6 +49,48 @@ check_test(
     'test render_me(p)'
 );
 
-sunrise();
+my $arrayref = [ { name => 'one' }, { name => 'two' } ];
+$instance->mock('arrayref', sub { return $arrayref });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref',
+            instance => $instance,
+            func => 'arrayref',
+            expected => $arrayref,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: arrayref is ref - is_deeply",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked arrayref function'
+);
+
+my $hashref = { name => 'one', second => 'two' };
+$instance->mock('hashref', sub { return $hashref });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref',
+            instance => $instance,
+            func => 'hashref',
+            expected => $hashref,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: hashref is ref - is_deeply",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked hashref function'
+);
+
+sunrise(18, '*\o/*');
 
 1;
