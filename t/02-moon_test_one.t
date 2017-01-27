@@ -112,7 +112,27 @@ check_test(
     'test mocked array function'
 );
 
+my %hash = (map { $_ => 1 } qw/one two three/);
+$instance->mock('hash', sub { return %hash });
 
-sunrise(24, '*\o/*');
+check_test(
+    sub {
+        moon_test_one(
+            test => 'hash',
+            instance => $instance,
+            func => 'hash',
+            expected => \%hash,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: hash is hash - reference - is_deeply",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked hash function'
+);
+
+sunrise(30, '*\o/*');
 
 1;

@@ -116,7 +116,7 @@ sub moon_test_one {
             return is($test[0], $expected[0], "$test_name is scalar - is - $expected[0]");
         }
         when (/hash/){
-            return is_deeply(%{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
+            return is_deeply({@test}, $expected[0], "$test_name is hash - reference - is_deeply");
         }
         when (/array/){
             return is_deeply(\@test, $expected[0], "$test_name is array - reference - is_deeply");
