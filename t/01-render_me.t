@@ -84,6 +84,6 @@ check_test(
     'test broken()'
 );
 
-done_testing();
+sunrise();
 
 1;

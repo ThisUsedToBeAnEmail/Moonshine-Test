@@ -49,6 +49,6 @@ check_test(
     'test render_me(p)'
 );
 
-done_testing();
+sunrise();
 
 1;

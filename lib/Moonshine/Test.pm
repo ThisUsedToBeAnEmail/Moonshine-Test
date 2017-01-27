@@ -9,9 +9,9 @@ use Params::Validate qw/:all/;
 
 use Exporter 'import';
 
-our @EXPORT = qw/render_me moon_test_one done_testing/;
+our @EXPORT = qw/render_me moon_test_one sunrise/;
 
-our %EXPORT_TAGS = ( all => [qw/render_me moon_test_one done_testing/], element => [qw/render_me done_testing/] );
+our %EXPORT_TAGS = ( all => [qw/render_me moon_test_one sunrise/], element => [qw/render_me sunrise/] );
 
 use feature qw/switch/;
 no if $] >= 5.017011, warnings => 'experimental::smartmatch';
@@ -69,7 +69,7 @@ if you don't export anything, such as for a purely object-oriented module.
     moon_test_one(
         instance  => 0,
         meth      => 0,
-        function    => 0,
+        function  => 0,
         args      => { },
         args_list => 0,
         test      => 0,
@@ -84,7 +84,7 @@ sub moon_test_one {
         spec   => {
             instance  => 0,
             meth      => 0,
-            function    => 0,
+            function  => 0,
             args      => { default => {} },
             args_list => 0,
             test      => 0,
@@ -110,16 +110,16 @@ sub moon_test_one {
     
     given ( $instruction{test} ) {
         when (/ref/){
-            return is_deeply( $test[0], $expected[0], "$test_name is ref - is_deeply");
+            return is_deeply($test[0], $expected[0], "$test_name is ref - is_deeply");
         }
         when (/scalar/){
             return is($test[0], $expected[0], "$test_name is scalar - is - $expected[0]");
         }
         when (/hash/){
-            return is_deeply( %{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
+            return is_deeply(%{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
         }
         when (/array/){
-            return is_deeply( \@test, \@expected, "$test_name is array - reference - is_deeply");
+            return is_deeply(\@test, \@expected, "$test_name is array - reference - is_deeply");
         }
         when (/obj/){
             return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
@@ -214,6 +214,28 @@ sub _run_the_code {
     
     diag explain $instruction;
     die;
+}
+
+=head2 sunrise
+
+    sunrise(); # done_testing();
+
+=cut
+
+sub sunrise {
+    diag sprintf('                         
+                                    %s
+            ^^                   @@@@@@@@@
+       ^^       ^^            @@@@@@@@@@@@@@@
+                            @@@@@@@@@@@@@@@@@@              ^^
+                           @@@@@@@@@@@@@@@@@@@@
+ ---- -- ----- -------- -- &&&&&&&&&&&&&&&&&&&& ------- ----------- ---
+ -         --   -  -       -------------------- -       --     -- -
+   -      --      -- -- --  ------------- ----  -     ---    - ---  - --
+   -  --     -         -      ------  -- ---       -- - --  -- -
+ -  -       - -      -           -- ------  -      --  -             --
+       -             -        -      -      --   -             -', '\o/');
+    return done_testing();
 }
 
 =head1 AUTHOR
