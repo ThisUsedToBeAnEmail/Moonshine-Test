@@ -153,6 +153,64 @@ check_test(
     'test mocked obj function'
 );
 
-sunrise(36, '*\o/*');
+$instance->mock('catch', sub { die 'a horrible death'; });
+
+check_test(
+    sub {
+        moon_test_one(
+            catch => 1,
+            instance => $instance,
+            func => 'catch',
+            expected => qr/a horrible death/,
+        );
+    },
+    {
+        ok => 1,
+        name => "catch is like - (?^:a horrible death)",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked catch(die) function'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'render',
+            instance => $instance,
+            func => 'broken',
+            args => {
+                class => 'test',
+                data  => 'test',
+            },
+            expected => '<div class="test">test</div>'
+        );
+    },
+    {
+        ok => 0,
+        name => "render instance: <div class=\"test\">test</div>",
+        depth => 3,
+        diag => "         got: '< class=\"test\">test</>'\n    expected: '<div class=\"test\">test</div>'"
+    },
+    'test broken()'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            instance => $instance,
+            func => 'hash',
+            expected => \%hash,
+        );
+    },
+    {
+        ok => 0,
+        diag => "No instruction{test} passed to moon_test_one",
+        depth => 2,
+    },
+    'test no instruction'
+);
+
+sunrise(55, '*\o/*');
 
 1;

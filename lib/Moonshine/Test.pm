@@ -14,7 +14,7 @@ our @EXPORT = qw/render_me moon_test_one sunrise/;
 our %EXPORT_TAGS = ( all => [qw/render_me moon_test_one sunrise/], element => [qw/render_me sunrise/] );
 
 use feature qw/switch/;
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
+no if $] >= 5.018, warnings => 'experimental::smartmatch';
 
 =head1 NAME
 
@@ -84,7 +84,7 @@ sub moon_test_one {
         spec   => {
             instance  => 0,
             meth      => 0,
-            func  => 0,
+            func      => 0,
             args      => { default => {} },
             args_list => 0,
             test      => 0,
@@ -107,7 +107,13 @@ sub moon_test_one {
         @test = _run_the_code(\%instruction);
         $test_name = shift @test;
     }
-    
+
+    if (not exists $instruction{test}) {
+        ok(0); 
+        diag 'No instruction{test} passed to moon_test_one';
+        return;
+    }
+
     given ( $instruction{test} ) {
         when (/ref/){
             return is_deeply($test[0], $expected[0], "$test_name is ref - is_deeply");
@@ -122,8 +128,6 @@ sub moon_test_one {
             return is_deeply(\@test, $expected[0], "$test_name is array - reference - is_deeply");
         }
         when (/obj/){
-            use Data::Dumper;
-            warn Dumper @test;
             return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
         }
         when (/like/) {
@@ -134,10 +138,6 @@ sub moon_test_one {
                 instance     => $test[0], 
                 expected     => $expected[0],
             );
-        }
-        default {
-            diag explain \%instruction;
-            ok(0);
         }
     }
 }
