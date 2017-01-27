@@ -133,6 +133,26 @@ check_test(
     'test mocked hash function'
 );
 
-sunrise(30, '*\o/*');
+$instance->mock('obj', sub { return bless {}, 'Test::Moon'; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'obj',
+            instance => $instance,
+            func => 'obj',
+            expected => 'Test::Moon',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: obj is Object - blessed - is - Test::Moon",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked obj function'
+);
+
+sunrise(36, '*\o/*');
 
 1;

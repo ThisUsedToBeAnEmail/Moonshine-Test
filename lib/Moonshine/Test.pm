@@ -122,6 +122,8 @@ sub moon_test_one {
             return is_deeply(\@test, $expected[0], "$test_name is array - reference - is_deeply");
         }
         when (/obj/){
+            use Data::Dumper;
+            warn Dumper @test;
             return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
         }
         when (/like/) {
