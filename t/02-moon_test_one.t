@@ -91,6 +91,28 @@ check_test(
     'test mocked hashref function'
 );
 
-sunrise(18, '*\o/*');
+my @array = (qw/one two three/);
+$instance->mock('array', sub { return @array });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'array',
+            instance => $instance,
+            func => 'array',
+            expected => [qw/one two three/],
+        );
+    },
+    {
+        ok => 1,
+        name => "function: array is array - reference - is_deeply",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked array function'
+);
+
+
+sunrise(24, '*\o/*');
 
 1;

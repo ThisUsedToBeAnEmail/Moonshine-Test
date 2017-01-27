@@ -119,7 +119,7 @@ sub moon_test_one {
             return is_deeply(%{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
         }
         when (/array/){
-            return is_deeply(\@test, \@expected, "$test_name is array - reference - is_deeply");
+            return is_deeply(\@test, $expected[0], "$test_name is array - reference - is_deeply");
         }
         when (/obj/){
             return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
@@ -166,6 +166,7 @@ sub render_me {
         spec   => {
             instance => 1,
             func => 0,
+            meth => 0,
             args     => { default => {} },
             expected => { type => SCALAR },
         }
