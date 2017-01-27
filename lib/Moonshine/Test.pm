@@ -4,14 +4,17 @@ use 5.006;
 use strict;
 use warnings;
 use Test::More;
-
+use Scalar::Util qw/blessed/;
 use Params::Validate qw/:all/;
 
 use Exporter 'import';
 
-our @EXPORT = qw/render_me done_testing/;
+our @EXPORT = qw/render_me moon_test_one done_testing/;
 
-our %EXPORT_TAGS = ( all => [qw/render_me done_testing/], element => [qw/render_me done_testing/] );
+our %EXPORT_TAGS = ( all => [qw/render_me moon_test_one done_testing/], element => [qw/render_me done_testing/] );
+
+use feature qw/switch/;
+no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 =head1 NAME
 
@@ -66,7 +69,7 @@ if you don't export anything, such as for a purely object-oriented module.
     moon_test_one(
         instance  => 0,
         meth      => 0,
-        action      => 0,
+        function    => 0,
         args      => { },
         args_list => 0,
         test      => 0,
@@ -81,7 +84,7 @@ sub moon_test_one {
         spec   => {
             instance  => 0,
             meth      => 0,
-            action    => 0,
+            function    => 0,
             args      => { default => {} },
             args_list => 0,
             test      => 0,
@@ -97,7 +100,7 @@ sub moon_test_one {
     if ($instruction{catch}) {
         $test_name = 'catch';
         exists $instruction{test} or $instruction{test} = 'like';
-        eval { _run_the_code(\%instruction) }
+        eval { _run_the_code(\%instruction) };
         @test = $@;
     }
     else {
@@ -110,8 +113,7 @@ sub moon_test_one {
             return is_deeply( $test[0], $expected[0], "$test_name is ref - is_deeply");
         }
         when (/scalar/){
-            my $txt = $expected[0] // 'undef';
-            return is($test[0], $txt, "$test_name is scalar - is - $txt");
+            return is($test[0], $expected[0], "$test_name is scalar - is - $expected[0]");
         }
         when (/hash/){
             return is_deeply( %{@test}, %{@expected}, "$test_name is hash - reference - is_deeply");
@@ -128,48 +130,13 @@ sub moon_test_one {
         when (/render/){
             return render_me(
                 instance     => $test[0], 
-                expected     => $test[0],
+                expected     => $expected[0],
             );
         }
         default {
             diag explain \%instruction;
             ok(0);
         }
-    }
-}
-
-=head2 _run_the_code
-
-    _run_the_code({
-        instance => ''
-        action => '',
-        ...
-        meth => '',
-    });
-
-=cut
-
-sub _run_the_code {
-    my $instructions = shift;
-
-    my $test_name;
-    if (my $action = $instruction->{action}) {
-        $test_name = $action;
-        return defined $instruction->{args_list}
-          ? ($test_name, $instruction->{instance}->$action(@{ $instruction->{args} }))
-          : ($test_name, $instruction->{instance}->$action( $instruction->{args} ));
-    }
-    elsif(my $meth = $instruction->{meth}) {
-        my $cv = svref_2object($meth);
-        my $gv = $cv->GV;
-        my $test_name = $gv->NAME;
-        return defined $instruction->{args_list}
-          ? ($test_name, $meth->( @{ $instruction->{args} } ))
-          : ($test_name, $meth->( $instruction->{args} ));
-    }
-    else {
-        diag explain $instruction;
-        die;
     }
 }
 
@@ -194,7 +161,7 @@ Or test a function..
 =cut
 
 sub render_me {
-    my %args = validate_with(
+    my %instruction = validate_with(
         params => \@_,
         spec   => {
             instance => 1,
@@ -204,17 +171,49 @@ sub render_me {
         }
     );
 
-    my $instance;
-    my $test_name = 'element';
-    if (my $action = $args{function}) {
-        $test_name .= " from function $action";
-        $instance = $args{instance}->$action( $args{args} );   
-    } else {
-        $instance = $args{instance};
-    }
+    my ($test_name, $instance) = _run_the_code(\%instruction);
 
     return is( $instance->render,
-        $args{expected}, "render $test_name: $args{expected}" );
+        $instruction{expected}, "render $test_name: $instruction{expected}" );
+}
+
+=head2 _run_the_code
+
+    _run_the_code({
+        instance => ''
+        function => '',
+        ...
+        meth => '',
+    });
+
+=cut
+
+sub _run_the_code {
+    my $instruction = shift;
+
+    my $test_name;
+    if (my $function = $instruction->{function}) {
+        $test_name = "function: ${function}";
+        return defined $instruction->{args_list}
+          ? ($test_name, $instruction->{instance}->$function(@{ $instruction->{args} }))
+          : ($test_name, $instruction->{instance}->$function( $instruction->{args} ));
+    }
+    elsif(my $meth = $instruction->{meth}) {
+        my $cv = svref_2object($meth);
+        my $gv = $cv->GV;
+        my $meth_name = $gv->NAME;
+        $test_name = "meth: ${meth_name}";
+        return defined $instruction->{args_list}
+          ? ($test_name, $meth->( @{ $instruction->{args} } ))
+          : ($test_name, $meth->( $instruction->{args} ));
+    }
+    elsif(exists $instruction->{instance}) {
+        $test_name = 'instance';
+        return ($test_name, $instruction->{instance});    
+    }
+    
+    diag explain $instruction;
+    die;
 }
 
 =head1 AUTHOR

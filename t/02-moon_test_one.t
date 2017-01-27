@@ -1,6 +1,6 @@
-use Test::Tester tests => 19;
+use Test::Tester;
 
-use Moonshine::Test qw/:element/;
+use Moonshine::Test qw/:all/;
 use Test::MockObject;
 
 (my $element = Test::MockObject->new)
@@ -30,7 +30,8 @@ $instance->mock('broken', sub { my $args = $_[1];
 
 check_test(
     sub {
-        render_me(
+        moon_test_one(
+            test => 'render_me',
             instance => $instance,
             function => 'p',
             args => {
@@ -41,47 +42,11 @@ check_test(
     },
     {
         ok => 1,
-        name => "render function: p: <p>test</p>",
-        depth => 2,
+        name => "render instance: <p>test</p>",
+        depth => 3,
         completed => 1,
     },
     'test render_me(p)'
-);
-
-check_test(
-    sub {
-        render_me(
-            instance => $div,
-            expected => '<div class="test">test</div>'
-        );
-    },
-    {
-        ok => 1,
-        name => "render instance: <div class=\"test\">test</div>",
-        depth => 2,
-    },
-    'test render_me(div)'
-);
-
-check_test(
-    sub {
-        render_me(
-            instance => $instance,
-            function => 'broken',
-            args => {
-                class => 'test',
-                data  => 'test',
-            },
-            expected => '<div class="test">test</div>'
-        );
-    },
-    {
-        ok => 0,
-        name => "render function: broken: <div class=\"test\">test</div>",
-        depth => 2,
-        diag => "         got: '< class=\"test\">test</>'\n    expected: '<div class=\"test\">test</div>'"
-    },
-    'test broken()'
 );
 
 done_testing();
