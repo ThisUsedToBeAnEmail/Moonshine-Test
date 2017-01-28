@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -189,7 +189,7 @@ sub moon_test_one {
         }
         when (/scalar/) {
             return is( $test[0], $expected[0],
-                "$test_name is scalar - is - $expected[0]" );
+                sprintf "%s is scalar - is - %s", $test_name, ($expected[0] // 'undef'));
         }
         when (/hash/) {
             return is_deeply( {@test}, $expected[0],
