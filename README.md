@@ -1,6 +1,6 @@
 # NAME
 
-Moonshine::Test - The great new Moonshine::Test!
+Moonshine::Test - Test!
 
 # VERSION
 
@@ -8,19 +8,25 @@ Version 0.01
 
 # SYNOPSIS
 
-Quick summary of what the module does.
+    use Moonshine::Test qw/:all/;
 
-Perhaps a little code snippet.
+    moon_test_one(
+        test      => 'scalar',
+        meth      => \&Moonshine::Util::join_string,
+        args      => [
+            'first', 'second'       
+        ],
+        args_list => 1,
+        expected  => 'first second',
+    );
 
-    use Moonshine::Test;
+    sunrise(1);
 
 # EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
 ## all
 
+- moon\_test\_one
 - render\_me
 - done\_testing
 
@@ -32,6 +38,68 @@ if you don't export anything, such as for a purely object-oriented module.
 # SUBROUTINES/METHODS
 
 ## moon\_test\_one
+
+    moon_test_one(
+        test      => 'render_me',
+        instance  => Moonshine::Component->new(),
+        func      => 'button',
+        args      => { 
+            data  => '...'
+        },
+        expected  => '<button>...</button>',
+    );
+
+## Instructions
+
+Valid instructions moon\_test\_one accepts
+
+### test/expected
+
+    test     => 'like'
+    expected => qr//
+
+moon\_test\_one can currently run the following tests.
+
+- ref - is\_deeply - expected \[\] or {}
+- scalar - is - expected '',
+- hash - is\_deeply - expected {},
+- array - is\_deeply - expected \[\],
+- obj - blessed /o\\ - expected '',
+- like - like - qr//,
+
+### catch
+
+when you want to catch exceptions....
+
+    catch => 1,
+
+defaults the instruction{test} to like.
+
+### instance
+
+    my $instance = Moonshine::Element->new();
+    instance => $instance,
+
+### func
+
+call a function from the instance
+
+    instance => $instance,
+    func     => 'render'
+
+### meth
+
+    meth => \&Moonshine::Element::render,
+    
+
+### args
+
+    {} or []
+
+### args\_list
+
+    args      => [qw/one, two/],
+    args_list => 1,
 
 ## render\_me
 
@@ -46,10 +114,14 @@ Or test a function..
 
     render_me(
         instance => $instance,
-        function => 'div',
+        func => 'div',
         args     => { data => 'echo' },
         expected => '<div>echo</div>',
     );
+
+## sunrise
+
+    sunrise(); # done_testing();
 
 # AUTHOR
 

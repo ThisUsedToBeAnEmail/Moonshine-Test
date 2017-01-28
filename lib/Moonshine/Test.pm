@@ -1,6 +1,5 @@
 package Moonshine::Test;
 
-use 5.006;
 use strict;
 use warnings;
 use Test::More;
@@ -11,7 +10,10 @@ use Exporter 'import';
 
 our @EXPORT = qw/render_me moon_test_one sunrise/;
 
-our %EXPORT_TAGS = ( all => [qw/render_me moon_test_one sunrise/], element => [qw/render_me sunrise/] );
+our %EXPORT_TAGS = (
+    all     => [qw/render_me moon_test_one sunrise/],
+    element => [qw/render_me sunrise/]
+);
 
 use feature qw/switch/;
 no if $] >= 5.018, warnings => 'experimental::smartmatch';
@@ -159,50 +161,57 @@ sub moon_test_one {
         }
     );
 
-    my @test = ();
+    my @test      = ();
     my $test_name = '';
-    my @expected = $instruction{expected};
+    my @expected  = $instruction{expected};
 
-    if ($instruction{catch}) {
+    if ( $instruction{catch} ) {
         $test_name = 'catch';
         exists $instruction{test} or $instruction{test} = 'like';
-        eval { _run_the_code(\%instruction) };
+        eval { _run_the_code( \%instruction ) };
         @test = $@;
     }
     else {
-        @test = _run_the_code(\%instruction);
+        @test      = _run_the_code( \%instruction );
         $test_name = shift @test;
     }
 
-    if (not exists $instruction{test}) {
-        ok(0); 
+    if ( not exists $instruction{test} ) {
+        ok(0);
         diag 'No instruction{test} passed to moon_test_one';
         return;
     }
 
     given ( $instruction{test} ) {
-        when (/ref/){
-            return is_deeply($test[0], $expected[0], "$test_name is ref - is_deeply");
+        when (/ref/) {
+            return is_deeply( $test[0], $expected[0],
+                "$test_name is ref - is_deeply" );
         }
-        when (/scalar/){
-            return is($test[0], $expected[0], "$test_name is scalar - is - $expected[0]");
+        when (/scalar/) {
+            return is( $test[0], $expected[0],
+                "$test_name is scalar - is - $expected[0]" );
         }
-        when (/hash/){
-            return is_deeply({@test}, $expected[0], "$test_name is hash - reference - is_deeply");
+        when (/hash/) {
+            return is_deeply( {@test}, $expected[0],
+                "$test_name is hash - reference - is_deeply" );
         }
-        when (/array/){
-            return is_deeply(\@test, $expected[0], "$test_name is array - reference - is_deeply");
+        when (/array/) {
+            return is_deeply( \@test, $expected[0],
+                "$test_name is array - reference - is_deeply" );
         }
-        when (/obj/){
-            return is(blessed $test[0], $expected[0], "$test_name is Object - blessed - is - $expected[0]");
+        when (/obj/) {
+            return is( blessed $test[0],
+                $expected[0],
+                "$test_name is Object - blessed - is - $expected[0]" );
         }
         when (/like/) {
-            return like($test[0], $expected[0], "$test_name is like - $expected[0]"); 
+            return like( $test[0], $expected[0],
+                "$test_name is like - $expected[0]" );
         }
-        when (/render/){
+        when (/render/) {
             return render_me(
-                instance     => $test[0], 
-                expected     => $expected[0],
+                instance => $test[0],
+                expected => $expected[0],
             );
         }
         default {
@@ -238,14 +247,14 @@ sub render_me {
         params => \@_,
         spec   => {
             instance => 1,
-            func => 0,
-            meth => 0,
+            func     => 0,
+            meth     => 0,
             args     => { default => {} },
             expected => { type => SCALAR },
         }
     );
 
-    my ($test_name, $instance) = _run_the_code(\%instruction);
+    my ( $test_name, $instance ) = _run_the_code( \%instruction );
 
     return is( $instance->render,
         $instruction{expected}, "render $test_name: $instruction{expected}" );
@@ -255,25 +264,32 @@ sub _run_the_code {
     my $instruction = shift;
 
     my $test_name;
-    if (my $func = $instruction->{func}) {
+    if ( my $func = $instruction->{func} ) {
         $test_name = "function: ${func}";
         return defined $instruction->{args_list}
-          ? ($test_name, $instruction->{instance}->$func(@{ $instruction->{args} }))
-          : ($test_name, $instruction->{instance}->$func( $instruction->{args} ));
+          ? (
+            $test_name,
+            $instruction->{instance}->$func( @{ $instruction->{args} } )
+          )
+          : (
+            $test_name, $instruction->{instance}->$func( $instruction->{args} )
+          );
     }
-    elsif(my $meth = $instruction->{meth}) {
+    elsif ( my $meth = $instruction->{meth} ) {
         my $meth_name = svref_2object($meth)->GV->NAME;
         $test_name = "method: ${meth_name}";
-        return defined $instruction->{args_list}
-          ? ($test_name, $meth->( @{ $instruction->{args} } ))
-          : ($test_name, $meth->( $instruction->{args} ));
+        return
+          defined $instruction->{args_list}
+          ? ( $test_name, $meth->( @{ $instruction->{args} } ) )
+          : ( $test_name, $meth->( $instruction->{args} ) );
     }
-    elsif(exists $instruction->{instance}) {
+    elsif ( exists $instruction->{instance} ) {
         $test_name = 'instance';
-        return ($test_name, $instruction->{instance});    
+        return ( $test_name, $instruction->{instance} );
     }
-    
-    die ('instruction passed to _run_the_code must have a func, meth or instance');
+
+    die('instruction passed to _run_the_code must have a func, meth or instance'
+    );
 }
 
 =head2 sunrise
@@ -285,7 +301,8 @@ sub _run_the_code {
 sub sunrise {
     my $done_testing = done_testing(shift);
     diag explain $done_testing;
-    diag sprintf('                         
+    diag sprintf(
+        '                         
                                    %s
             ^^                   @@@@@@@@@
        ^^       ^^            @@@@@@@@@@@@@@@
@@ -296,7 +313,9 @@ sub sunrise {
    -      --      -- -- --  ------------- ----  -     ---    - ---  - --
    -  --     -         -      ------  -- ---       -- - --  -- -
  -  -       - -      -           -- ------  -      --  -             --
-       -             -        -      -      --   -             -', shift // ' \o/ ');
+       -             -        -      -      --   -             -',
+        shift // ' \o/ '
+    );
     return $done_testing;
 }
 
@@ -383,4 +402,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of Moonshine::Test
+1;    # End of Moonshine::Test
