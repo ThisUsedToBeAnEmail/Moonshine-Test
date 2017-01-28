@@ -3,3 +3,6 @@ Revision history for Moonshine-Test
 0.01    Date/time
         First version, released on an unsuspecting world.
 
+0.02    28/01/2017
+        fix BUILD_REQUIRES - Add Test::MockObject
+

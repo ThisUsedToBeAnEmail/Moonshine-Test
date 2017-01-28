@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -216,7 +216,7 @@ sub moon_test_one {
         }
         default {
             ok(0);
-            diag 'Unknown instruction{test}: $_ passed to moon_test_one';
+            diag "Unknown instruction{test}: $_ passed to moon_test_one";
             return;
         }
     }
