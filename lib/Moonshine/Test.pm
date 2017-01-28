@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 use Scalar::Util qw/blessed/;
 use Params::Validate qw/:all/;
-
+use B qw/svref_2object/;
 use Exporter 'import';
 
 our @EXPORT = qw/render_me moon_test_one sunrise/;
@@ -18,7 +18,7 @@ no if $] >= 5.018, warnings => 'experimental::smartmatch';
 
 =head1 NAME
 
-Moonshine::Test - The great new Moonshine::Test!
+Moonshine::Test - Test!
 
 =head1 VERSION
 
@@ -30,21 +30,27 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
+    use Moonshine::Test qw/:all/;
 
-Perhaps a little code snippet.
+    moon_test_one(
+        test      => 'scalar',
+        meth      => \&Moonshine::Util::join_string,
+        args      => [
+            'first', 'second'       
+        ],
+        args_list => 1,
+        expected  => 'first second',
+    );
 
-    use Moonshine::Test;
-
+    sunrise(1);
 
 =head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
 
 =head2 all
 
 =over 
+
+=item moon_test_one
 
 =item render_me
 
@@ -67,14 +73,74 @@ if you don't export anything, such as for a purely object-oriented module.
 =head2 moon_test_one
 
     moon_test_one(
-        instance  => 0,
-        meth      => 0,
-        func  => 0,
-        args      => { },
-        args_list => 0,
-        test      => 0,
-        expected  => 1,
+        test      => 'render_me',
+        instance  => Moonshine::Component->new(),
+        func      => 'button',
+        args      => { 
+            data  => '...'
+        },
+        expected  => '<button>...</button>',
     );
+
+=head2 Instructions
+
+Valid instructions moon_test_one accepts
+
+=head3 test/expected
+
+    test     => 'like'
+    expected => qr//
+
+moon_test_one can currently run the following tests.
+
+=over
+
+=item ref - is_deeply - expected [] or {}
+
+=item scalar - is - expected '',
+
+=item hash - is_deeply - expected {},
+
+=item array - is_deeply - expected [],
+
+=item obj - blessed /o\ - expected '',
+
+=item like - like - qr//,
+
+=back
+
+=head3 catch
+
+when you want to catch exceptions....
+
+    catch => 1,
+
+defaults the instruction{test} to like.
+
+=head3 instance
+
+    my $instance = Moonshine::Element->new();
+    instance => $instance,
+
+=head3 func
+
+call a function from the instance
+    
+    instance => $instance,
+    func     => 'render'
+
+=head3 meth
+
+    meth => \&Moonshine::Element::render,
+    
+=head3 args
+
+    {} or []
+
+=head3 args_list
+
+    args      => [qw/one, two/],
+    args_list => 1,
 
 =cut
 
@@ -139,6 +205,11 @@ sub moon_test_one {
                 expected     => $expected[0],
             );
         }
+        default {
+            ok(0);
+            diag 'Unknown instruction{test}: $_ passed to moon_test_one';
+            return;
+        }
     }
 }
 
@@ -180,17 +251,6 @@ sub render_me {
         $instruction{expected}, "render $test_name: $instruction{expected}" );
 }
 
-=head2 _run_the_code
-
-    _run_the_code({
-        instance => ''
-        func => '',
-        ...
-        meth => '',
-    });
-
-=cut
-
 sub _run_the_code {
     my $instruction = shift;
 
@@ -202,9 +262,7 @@ sub _run_the_code {
           : ($test_name, $instruction->{instance}->$func( $instruction->{args} ));
     }
     elsif(my $meth = $instruction->{meth}) {
-        my $cv = svref_2object($meth);
-        my $gv = $cv->GV;
-        my $meth_name = $gv->NAME;
+        my $meth_name = svref_2object($meth)->GV->NAME;
         $test_name = "method: ${meth_name}";
         return defined $instruction->{args_list}
           ? ($test_name, $meth->( @{ $instruction->{args} } ))
@@ -215,8 +273,7 @@ sub _run_the_code {
         return ($test_name, $instruction->{instance});    
     }
     
-    diag explain $instruction;
-    die;
+    die ('instruction passed to _run_the_code must have a func, meth or instance');
 }
 
 =head2 sunrise
@@ -259,7 +316,6 @@ You can find documentation for this module with the perldoc command.
 
     perldoc Moonshine::Test
 
-
 You can also look for information at:
 
 =over 4
@@ -282,9 +338,7 @@ L<http://search.cpan.org/dist/Moonshine-Test/>
 
 =back
 
-
 =head1 ACKNOWLEDGEMENTS
-
 
 =head1 LICENSE AND COPYRIGHT
 
