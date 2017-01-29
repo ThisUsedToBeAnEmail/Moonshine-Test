@@ -4,7 +4,7 @@ Moonshine::Test - Test!
 
 # VERSION
 
-Version 0.01
+Version 0.04
 
 # SYNOPSIS
 
@@ -12,7 +12,7 @@ Version 0.01
 
     moon_test_one(
         test      => 'scalar',
-        meth      => \&Moonshine::Util::join_string,
+        meth      => \&Moonshine::Util::append_str,
         args      => [
             'first', 'second'       
         ],
@@ -66,6 +66,8 @@ moon\_test\_one can currently run the following tests.
 - array - is\_deeply - expected \[\],
 - obj - blessed /o\\ - expected '',
 - like - like - qr//,
+- true - is - 1,
+- false - is - 0,
 
 ### catch
 
