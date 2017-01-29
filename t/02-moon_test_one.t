@@ -31,7 +31,7 @@ $instance->mock('broken', sub { my $args = $_[1];
 check_test(
     sub {
         moon_test_one(
-            test => 'render_me',
+            test => 'render',
             instance => $instance,
             func => 'p',
             args => {

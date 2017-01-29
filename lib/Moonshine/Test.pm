@@ -187,38 +187,38 @@ sub moon_test_one {
     }
 
     given ( $instruction{test} ) {
-        when (/ref/) {
+        when ('ref') {
             return is_deeply( $test[0], $expected[0],
                 "$test_name is ref - is_deeply" );
         }
-        when (/scalar/) {
+        when ('scalar') {
             return is( $test[0], $expected[0],
                 sprintf "%s is scalar - is - %s", $test_name, ($expected[0] // 'undef'));
         }
-        when (/hash/) {
+        when ('hash') {
             return is_deeply( {@test}, $expected[0],
                 "$test_name is hash - reference - is_deeply" );
         }
-        when (/array/) {
+        when ('array') {
             return is_deeply( \@test, $expected[0],
                 "$test_name is array - reference - is_deeply" );
         }
-        when (/obj/) {
+        when ('obj') {
             return is( blessed $test[0],
                 $expected[0],
                 "$test_name is Object - blessed - is - $expected[0]" );
         }
-        when (/like/) {
+        when ('like') {
             return like( $test[0], $expected[0],
                 "$test_name is like - $expected[0]" );
         }
-        when (/true/) {
+        when ('true') {
             return is($test[0], 1, "$test_name is true - 1"); 
         }
-        when (/false/) {
+        when ('false') {
             return is($test[0], 0, "$test_name is false - 0");
         }
-        when (/render/) {
+        when ('render') {
             return render_me(
                 instance => $test[0],
                 expected => $expected[0],
