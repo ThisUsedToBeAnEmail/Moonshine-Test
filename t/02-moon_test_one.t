@@ -211,6 +211,46 @@ check_test(
     'test no instruction'
 );
 
-sunrise(55, '*\o/*');
+
+$instance->mock('true', sub { return 1; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'true',
+            instance => $instance,
+            func => 'true',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: true is true - 1",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked true function'
+);
+
+$instance->mock('false', sub { return 0; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'false',
+            instance => $instance,
+            func => 'false',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: false is false - 0",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked false function'
+);
+
+
+sunrise(67, '*\o/*');
 
 1;

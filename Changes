@@ -9,4 +9,7 @@ Revision history for Moonshine-Test
 0.03    28/01/2017
         is - undef
 
+0.04    29/01/2017
+        test true(1) or false(0)
+
 

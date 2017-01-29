@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
@@ -36,7 +36,7 @@ our $VERSION = '0.03';
 
     moon_test_one(
         test      => 'scalar',
-        meth      => \&Moonshine::Util::join_string,
+        meth      => \&Moonshine::Util::append_str,
         args      => [
             'first', 'second'       
         ],
@@ -109,6 +109,10 @@ moon_test_one can currently run the following tests.
 
 =item like - like - qr//,
 
+=item true - is - 1,
+
+=item false - is - 0,
+
 =back
 
 =head3 catch
@@ -156,7 +160,7 @@ sub moon_test_one {
             args      => { default => {} },
             args_list => 0,
             test      => 0,
-            expected  => 1,
+            expected  => 0,
             catch     => 0,
         }
     );
@@ -208,6 +212,12 @@ sub moon_test_one {
             return like( $test[0], $expected[0],
                 "$test_name is like - $expected[0]" );
         }
+        when (/true/) {
+            return is($test[0], 1, "$test_name is true - 1"); 
+        }
+        when (/false/) {
+            return is($test[0], 0, "$test_name is false - 0");
+        }
         when (/render/) {
             return render_me(
                 instance => $test[0],
@@ -246,7 +256,7 @@ sub render_me {
     my %instruction = validate_with(
         params => \@_,
         spec   => {
-            instance => 1,
+            instance => 0,
             func     => 0,
             meth     => 0,
             args     => { default => {} },
