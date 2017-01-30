@@ -67,7 +67,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked arrayref function'
+    'test mocked arrayref'
 );
 
 my $hashref = { name => 'one', second => 'two' };
@@ -88,7 +88,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked hashref function'
+    'test mocked hashref'
 );
 
 my @array = (qw/one two three/);
@@ -109,7 +109,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked array function'
+    'test mocked array'
 );
 
 my %hash = (map { $_ => 1 } qw/one two three/);
@@ -130,7 +130,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked hash function'
+    'test mocked hash'
 );
 
 $instance->mock('obj', sub { return bless {}, 'Test::Moon'; });
@@ -150,7 +150,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked obj function'
+    'test mocked obj'
 );
 
 $instance->mock('catch', sub { die 'a horrible death'; });
@@ -170,7 +170,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked catch(die) function'
+    'test mocked catch(die)'
 );
 
 check_test(
@@ -228,7 +228,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked true function'
+    'test mocked true'
 );
 
 $instance->mock('false', sub { return 0; });
@@ -247,7 +247,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked false function'
+    'test mocked false'
 );
 
 $instance->mock('undefined', sub { return undef; });
@@ -266,7 +266,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked false function'
+    'test mocked undef'
 );
 
 $instance->mock('ref_scalar_key', sub { return { thing => 1234 }; });
@@ -287,7 +287,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked false function'
+    'test ref_key_scalar'
 );
 
 
@@ -308,9 +308,69 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked false function'
+    'test mocked ref_scalar_key no key '
 );
 
-sunrise(85, '*\o/*');
+$instance->mock('ref_ref_key', sub { return { thing => { okay => 'yes' } }; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_ref',
+            instance => $instance,
+            func => 'ref_ref_key',
+            key => 'thing',
+            expected => { okay => 'yes' },
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_ref_key is ref - has ref key: thing - is_deeply - ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test ref_key_ref'
+);
+
+$instance->mock('ref_refa_key', sub { return { thing => [ 'okay', 'yes' ] }; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_ref',
+            instance => $instance,
+            func => 'ref_refa_key',
+            key => 'thing',
+            expected => [ 'okay', 'yes' ],
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_refa_key is ref - has ref key: thing - is_deeply - ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test ref_key_ref'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_ref',
+            instance => $instance,
+            func => 'ref_ref_key',
+            expected => { okay => 'yes' },
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - ref_key_ref - testing - function: ref_ref_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_key_ref no key'
+);
+
+sunrise(103, '*\o/*');
 
 1;

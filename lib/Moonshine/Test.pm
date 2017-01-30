@@ -117,6 +117,10 @@ moon_test_one can currently run the following tests.
 
 =item undef - is - undef
 
+=item ref_key_scalar - is - '' (requires key)
+
+=item ref_key_ref - is_deeply - [] or {} (requires key)
+
 =back
 
 =head3 catch
@@ -200,6 +204,12 @@ sub moon_test_one {
             return defined $instruction{key}
                 ? is( $test[0]->{$instruction{key}}, $expected[0], "$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]")
                 : ok(0, "No key passed to test - ref_key_scalar - testing - $test_name");
+        }
+        when ('ref_key_ref') {
+            return defined $instruction{key}
+                ? is_deeply( $test[0]->{$instruction{key}}, $expected[0], 
+                        "$test_name is ref - has ref key: $instruction{key} - is_deeply - ref" )
+                : ok(0, "No key passed to test - ref_key_ref - testing - $test_name");
         }
         when ('scalar') {
             return is( $test[0], $expected[0],
