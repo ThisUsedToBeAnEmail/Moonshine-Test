@@ -371,6 +371,46 @@ check_test(
     'test mocked ref_key_ref no key'
 );
 
-sunrise(103, '*\o/*');
+$instance->mock('ref_index', sub { return [ 'thing', { thing => 'okay' }, 'yes' ] });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_index_scalar',
+            instance => $instance,
+            func => 'ref_index',
+            index => 0,
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_index is ref - has scalar index: 0 - is - thing",
+        depth => 2,
+        completed => 1,
+    },
+    'test ref_key_scalar'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_index_scalar',
+            instance => $instance,
+            func => 'ref_index',
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 0,
+        name => "No index passed to test - ref_index_scalar - testing - function: ref_index",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_key_ref no key'
+);
+
+
+sunrise(115, '*\o/*');
 
 1;
