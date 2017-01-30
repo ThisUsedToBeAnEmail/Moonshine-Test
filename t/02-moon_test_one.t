@@ -161,12 +161,12 @@ check_test(
             catch => 1,
             instance => $instance,
             func => 'catch',
-            expected => qr/a horrible death/,
+            expected => 'a horrible death',
         );
     },
     {
         ok => 1,
-        name => "catch is like - (?^:a horrible death)",
+        name => "catch is like - a horrible death",
         depth => 2,
         completed => 1,
     },
@@ -250,7 +250,25 @@ check_test(
     'test mocked false function'
 );
 
+$instance->mock('undefined', sub { return undef; });
 
-sunrise(67, '*\o/*');
+check_test(
+    sub {
+        moon_test_one(
+            test => 'undef',
+            instance => $instance,
+            func => 'undefined',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: undefined is undef",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked false function'
+);
+
+sunrise(73, '*\o/*');
 
 1;

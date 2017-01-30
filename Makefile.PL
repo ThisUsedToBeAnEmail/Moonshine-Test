@@ -19,6 +19,8 @@ WriteMakefile(
         'Test::More' => 0,
         'Test::Tester' => 0,
         'Test::MockObject' => 0,
+        'strict' => 0,
+        'warnings' => 0,
     },
     PREREQ_PM => {
         'Test::More' => 0,
@@ -28,6 +30,7 @@ WriteMakefile(
         'Exporter' => 0,
 		'strict' => 0,
 		'warnings' => 0,
+        'if' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Moonshine-Test-*' },

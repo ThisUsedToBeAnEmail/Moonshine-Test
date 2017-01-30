@@ -91,7 +91,9 @@ Valid instructions moon_test_one accepts
 =head3 test/expected
 
     test     => 'like'
-    expected => qr//
+    expected => 'a horrible death'
+    ....
+    like($test_outcome, qr/$expected/, "function: $func is like - $expected");
 
 moon_test_one can currently run the following tests.
 
@@ -107,11 +109,13 @@ moon_test_one can currently run the following tests.
 
 =item obj - blessed /o\ - expected '',
 
-=item like - like - qr//,
+=item like - like - '',
 
 =item true - is - 1,
 
 =item false - is - 0,
+
+=item undef - is - undef
 
 =back
 
@@ -193,7 +197,7 @@ sub moon_test_one {
         }
         when ('scalar') {
             return is( $test[0], $expected[0],
-                sprintf "%s is scalar - is - %s", $test_name, ($expected[0] // 'undef'));
+                sprintf "%s is scalar - is - %s", $test_name, $expected[0]);
         }
         when ('hash') {
             return is_deeply( {@test}, $expected[0],
@@ -209,7 +213,7 @@ sub moon_test_one {
                 "$test_name is Object - blessed - is - $expected[0]" );
         }
         when ('like') {
-            return like( $test[0], $expected[0],
+            return like( $test[0], qr/$expected[0]/,
                 "$test_name is like - $expected[0]" );
         }
         when ('true') {
@@ -217,6 +221,9 @@ sub moon_test_one {
         }
         when ('false') {
             return is($test[0], 0, "$test_name is false - 0");
+        }
+        when ('undef') {
+            return is($test[0], undef, "$test_name is undef"); 
         }
         when ('render') {
             return render_me(
