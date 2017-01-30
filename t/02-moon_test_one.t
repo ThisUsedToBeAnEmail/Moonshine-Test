@@ -410,7 +410,44 @@ check_test(
     'test mocked ref_key_ref no key'
 );
 
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_index_ref',
+            instance => $instance,
+            func => 'ref_index',
+            index => 1,
+            expected => { thing => 'okay' },
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_index is ref - has ref index: 1 - is_deeply - ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test ref_key_scalar'
+);
 
-sunrise(115, '*\o/*');
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_index_ref',
+            instance => $instance,
+            func => 'ref_index',
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 0,
+        name => "No index passed to test - ref_index_ref - testing - function: ref_index",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_key_ref no key'
+);
+
+
+sunrise(127, '*\o/*');
 
 1;
