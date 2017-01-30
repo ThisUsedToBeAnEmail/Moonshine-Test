@@ -269,6 +269,48 @@ check_test(
     'test mocked false function'
 );
 
-sunrise(73, '*\o/*');
+$instance->mock('ref_scalar_key', sub { return { thing => 1234 }; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_scalar',
+            instance => $instance,
+            func => 'ref_scalar_key',
+            key => 'thing',
+            expected => 1234,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_scalar_key is ref - has scalar key: thing - is - 1234",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked false function'
+);
+
+
+$instance->mock('ref_scalar_key', sub { return { thing => 1234 }; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_scalar',
+            instance => $instance,
+            func => 'ref_scalar_key',
+            expected => 1234,
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - ref_key_scalar - testing - function: ref_scalar_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked false function'
+);
+
+sunrise(85, '*\o/*');
 
 1;

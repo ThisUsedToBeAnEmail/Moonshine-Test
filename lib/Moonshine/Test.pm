@@ -166,6 +166,7 @@ sub moon_test_one {
             test      => 0,
             expected  => 0,
             catch     => 0,
+            key       => 0,
         }
     );
 
@@ -194,6 +195,11 @@ sub moon_test_one {
         when ('ref') {
             return is_deeply( $test[0], $expected[0],
                 "$test_name is ref - is_deeply" );
+        }
+        when ('ref_key_scalar') {
+            return defined $instruction{key}
+                ? is( $test[0]->{$instruction{key}}, $expected[0], "$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]")
+                : ok(0, "No key passed to test - ref_key_scalar - testing - $test_name");
         }
         when ('scalar') {
             return is( $test[0], $expected[0],
