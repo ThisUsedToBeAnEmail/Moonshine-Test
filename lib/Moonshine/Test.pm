@@ -121,9 +121,13 @@ moon_test_one can currently run the following tests.
 
 =item ref_key_ref - is_deeply - [] or {} (requires key)
 
+=item ref_key_like - like - ''
+
 =item ref_index_scalar - is - '' (requires index)
 
 =item ref_index_ref - is_deeply - [] or {} (required index)
+
+=item ref_index_like - like - ''
 
 =back
 
@@ -210,6 +214,11 @@ sub moon_test_one {
                 ? is( $test[0]->{$instruction{key}}, $expected[0], "$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]")
                 : ok(0, "No key passed to test - ref_key_scalar - testing - $test_name");
         }
+        when ('ref_key_like') {
+            return exists $instruction{key}
+                ? like( $test[0]->{$instruction{key}}, qr/$expected[0]/, "$test_name is ref - has scalar key: $instruction{key} - like - $expected[0]")
+                : ok(0, "No key passed to test - ref_key_like - testing - $test_name");
+        }
         when ('ref_key_ref') {
             return exists $instruction{key}
                 ? is_deeply( $test[0]->{$instruction{key}}, $expected[0], 
@@ -220,14 +229,12 @@ sub moon_test_one {
             return exists $instruction{index}
                 ? is( $test[0]->[$instruction{index}], $expected[0], "$test_name is ref - has scalar index: $instruction{index} - is - $expected[0]")
                 : ok(0, "No index passed to test - ref_index_scalar - testing - $test_name");
-
         }
         when ('ref_index_ref') {
          return exists $instruction{index}
                 ? is_deeply( $test[0]->[$instruction{index}], $expected[0], 
                         "$test_name is ref - has ref index: $instruction{index} - is_deeply - ref" )
                 : ok(0, "No index passed to test - ref_index_ref - testing - $test_name");
-
         }
         when ('scalar') {
             return is( $test[0], $expected[0],

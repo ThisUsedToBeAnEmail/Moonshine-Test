@@ -290,9 +290,6 @@ check_test(
     'test ref_key_scalar'
 );
 
-
-$instance->mock('ref_scalar_key', sub { return { thing => 1234 }; });
-
 check_test(
     sub {
         moon_test_one(
@@ -389,7 +386,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test ref_key_scalar'
+    'test ref_index_scalar'
 );
 
 check_test(
@@ -407,7 +404,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked ref_key_ref no key'
+    'test mocked ref_index_scalar no key'
 );
 
 check_test(
@@ -426,7 +423,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test ref_key_scalar'
+    'test ref_index_ref'
 );
 
 check_test(
@@ -444,10 +441,50 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked ref_key_ref no key'
+    'test mocked ref_index_ref no index'
 );
 
 
-sunrise(127, '*\o/*');
+$instance->mock('ref_like_key', sub { return { exception => 'mehhh the world has ended line 123 some_method.' }; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_like',
+            instance => $instance,
+            func => 'ref_like_key',
+            key => 'exception',
+            expected => 'mehhh the world has ended',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_like_key is ref - has scalar key: exception - like - mehhh the world has ended",
+        depth => 2,
+        completed => 1,
+    },
+    'test ref_key_like'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_key_like',
+            instance => $instance,
+            func => 'ref_like_key',
+            expected => 1234,
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - ref_key_like - testing - function: ref_like_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_key_like no key'
+);
+
+
+sunrise(139, '*\o/*');
 
 1;
