@@ -164,6 +164,14 @@ call a function from the instance
     args      => [qw/one, two/],
     args_list => 1,
 
+=head3 index
+
+index - required when testing - ref_index_*
+
+=head3 key
+
+key - required when testing - ref_key_*
+
 =cut
 
 sub moon_test_one {
@@ -231,10 +239,16 @@ sub moon_test_one {
                 : ok(0, "No index passed to test - ref_index_scalar - testing - $test_name");
         }
         when ('ref_index_ref') {
-         return exists $instruction{index}
+            return exists $instruction{index}
                 ? is_deeply( $test[0]->[$instruction{index}], $expected[0], 
                         "$test_name is ref - has ref index: $instruction{index} - is_deeply - ref" )
                 : ok(0, "No index passed to test - ref_index_ref - testing - $test_name");
+        }
+        when ('ref_index_like') {
+            return exists $instruction{index}
+                ? like( $test[0]->[$instruction{index}], qr/$expected[0]/, 
+                    "$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]")
+                : ok(0, "No index passed to test - ref_index_like - testing - $test_name");
         }
         when ('scalar') {
             return is( $test[0], $expected[0],

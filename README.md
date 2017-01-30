@@ -56,7 +56,9 @@ Valid instructions moon\_test\_one accepts
 ### test/expected
 
     test     => 'like'
-    expected => qr//
+    expected => 'a horrible death'
+    ....
+    like($test_outcome, qr/$expected/, "function: $func is like - $expected");
 
 moon\_test\_one can currently run the following tests.
 
@@ -65,9 +67,16 @@ moon\_test\_one can currently run the following tests.
 - hash - is\_deeply - expected {},
 - array - is\_deeply - expected \[\],
 - obj - blessed /o\\ - expected '',
-- like - like - qr//,
+- like - like - '',
 - true - is - 1,
 - false - is - 0,
+- undef - is - undef
+- ref\_key\_scalar - is - '' (requires key)
+- ref\_key\_ref - is\_deeply - \[\] or {} (requires key)
+- ref\_key\_like - like - ''
+- ref\_index\_scalar - is - '' (requires index)
+- ref\_index\_ref - is\_deeply - \[\] or {} (required index)
+- ref\_index\_like - like - ''
 
 ### catch
 
@@ -102,6 +111,14 @@ call a function from the instance
 
     args      => [qw/one, two/],
     args_list => 1,
+
+### index
+
+index - required when testing - ref\_index\_\*
+
+### key
+
+key - required when testing - ref\_key\_\*
 
 ## render\_me
 
