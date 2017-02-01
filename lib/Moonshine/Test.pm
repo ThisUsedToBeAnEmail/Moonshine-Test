@@ -28,7 +28,7 @@ Version 0.05
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
@@ -249,6 +249,23 @@ sub moon_test_one {
                 ? like( $test[0]->[$instruction{index}], qr/$expected[0]/, 
                     "$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]")
                 : ok(0, "No index passed to test - ref_index_like - testing - $test_name");
+        }
+        when ('list_index_scalar') {
+            return exists $instruction{index}
+                ? is( $test[$instruction{index}], $expected[0], "$test_name is list - has scalar index: $instruction{index} - is - $expected[0]")
+                : ok(0, "No index passed to test - list_index_scalar - testing - $test_name");
+        }
+        when ('list_index_ref') {
+            return exists $instruction{index}
+                ? is_deeply( $test[$instruction{index}], $expected[0], 
+                        "$test_name is list - has ref index: $instruction{index} - is_deeply - ref" )
+                : ok(0, "No index passed to test - list_index_ref - testing - $test_name");
+        }
+        when ('list_index_like') {
+            return exists $instruction{index}
+                ? like( $test[$instruction{index}], qr/$expected[0]/, 
+                    "$test_name is list - has scalar index: $instruction{index} - like - $expected[0]")
+                : ok(0, "No index passed to test - list_index_like - testing - $test_name");
         }
         when ('scalar') {
             return is( $test[0], $expected[0],

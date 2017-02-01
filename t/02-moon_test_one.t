@@ -523,6 +523,45 @@ check_test(
     'test mocked ref_key_like no key'
 );
 
-sunrise(151, '*\o/*');
+$instance->mock('list_like_ref', sub { return ( 'exception', 'mehhh the world has ended line 123 some_method.' ) });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_like',
+            instance => $instance,
+            func => 'list_like_ref',
+            index => 1,
+            expected => 'mehhh the world has ended',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_like_ref is list - has scalar index: 1 - like - mehhh the world has ended",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_index_like'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_like',
+            instance => $instance,
+            func => 'list_like_ref',
+            expected => 1234,
+        );
+    },
+    {
+        ok => 0,
+        name => "No index passed to test - list_index_like - testing - function: list_like_ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_index_like no key'
+);
+
+sunrise(163, '*\o/*');
 
 1;
