@@ -4,7 +4,7 @@ Moonshine::Test - Test!
 
 # VERSION
 
-Version 0.04
+Version 0.06
 
 # SYNOPSIS
 
@@ -14,7 +14,7 @@ Version 0.04
         test      => 'scalar',
         meth      => \&Moonshine::Util::append_str,
         args      => [
-            'first', 'second'       
+            'first', 'second'
         ],
         args_list => 1,
         expected  => 'first second',
@@ -43,7 +43,7 @@ Version 0.04
         test      => 'render_me',
         instance  => Moonshine::Component->new(),
         func      => 'button',
-        args      => { 
+        args      => {
             data  => '...'
         },
         expected  => '<button>...</button>',
@@ -77,6 +77,12 @@ moon\_test\_one can currently run the following tests.
 - ref\_index\_scalar - is - '' (requires index)
 - ref\_index\_ref - is\_deeply - \[\] or {} (required index)
 - ref\_index\_like - like - ''
+- list\_key\_scalar - is - '' (requires key)
+- list\_key\_ref - is\_deeply - \[\] or {} (requires key)
+- list\_key\_like - like - ''
+- list\_index\_scalar - is - '' (requires index)
+- list\_index\_ref - is\_deeply - \[\] or {} (required index)
+- list\_index\_like - like - ''
 
 ### catch
 
@@ -101,7 +107,6 @@ call a function from the instance
 ### meth
 
     meth => \&Moonshine::Element::render,
-    
 
 ### args
 

@@ -24,7 +24,7 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
@@ -38,7 +38,7 @@ our $VERSION = '0.06';
         test      => 'scalar',
         meth      => \&Moonshine::Util::append_str,
         args      => [
-            'first', 'second'       
+            'first', 'second'
         ],
         args_list => 1,
         expected  => 'first second',
@@ -50,7 +50,7 @@ our $VERSION = '0.06';
 
 =head2 all
 
-=over 
+=over
 
 =item moon_test_one
 
@@ -62,7 +62,7 @@ our $VERSION = '0.06';
 
 =head2 element
 
-=over 
+=over
 
 =item render_me
 
@@ -78,7 +78,7 @@ our $VERSION = '0.06';
         test      => 'render_me',
         instance  => Moonshine::Component->new(),
         func      => 'button',
-        args      => { 
+        args      => {
             data  => '...'
         },
         expected  => '<button>...</button>',
@@ -129,6 +129,18 @@ moon_test_one can currently run the following tests.
 
 =item ref_index_like - like - ''
 
+=item list_key_scalar - is - '' (requires key)
+
+=item list_key_ref - is_deeply - [] or {} (requires key)
+
+=item list_key_like - like - ''
+
+=item list_index_scalar - is - '' (requires index)
+
+=item list_index_ref - is_deeply - [] or {} (required index)
+
+=item list_index_like - like - ''
+
 =back
 
 =head3 catch
@@ -147,14 +159,14 @@ defaults the instruction{test} to like.
 =head3 func
 
 call a function from the instance
-    
+
     instance => $instance,
     func     => 'render'
 
 =head3 meth
 
     meth => \&Moonshine::Element::render,
-    
+
 =head3 args
 
     {} or []
@@ -229,7 +241,7 @@ sub moon_test_one {
         }
         when ('ref_key_ref') {
             return exists $instruction{key}
-                ? is_deeply( $test[0]->{$instruction{key}}, $expected[0], 
+                ? is_deeply( $test[0]->{$instruction{key}}, $expected[0],
                         "$test_name is ref - has ref key: $instruction{key} - is_deeply - ref" )
                 : ok(0, "No key passed to test - ref_key_ref - testing - $test_name");
         }
@@ -240,13 +252,13 @@ sub moon_test_one {
         }
         when ('ref_index_ref') {
             return exists $instruction{index}
-                ? is_deeply( $test[0]->[$instruction{index}], $expected[0], 
+                ? is_deeply( $test[0]->[$instruction{index}], $expected[0],
                         "$test_name is ref - has ref index: $instruction{index} - is_deeply - ref" )
                 : ok(0, "No index passed to test - ref_index_ref - testing - $test_name");
         }
         when ('ref_index_like') {
             return exists $instruction{index}
-                ? like( $test[0]->[$instruction{index}], qr/$expected[0]/, 
+                ? like( $test[0]->[$instruction{index}], qr/$expected[0]/,
                     "$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]")
                 : ok(0, "No index passed to test - ref_index_like - testing - $test_name");
         }
@@ -257,15 +269,32 @@ sub moon_test_one {
         }
         when ('list_index_ref') {
             return exists $instruction{index}
-                ? is_deeply( $test[$instruction{index}], $expected[0], 
+                ? is_deeply( $test[$instruction{index}], $expected[0],
                         "$test_name is list - has ref index: $instruction{index} - is_deeply - ref" )
                 : ok(0, "No index passed to test - list_index_ref - testing - $test_name");
         }
         when ('list_index_like') {
             return exists $instruction{index}
-                ? like( $test[$instruction{index}], qr/$expected[0]/, 
+                ? like( $test[$instruction{index}], qr/$expected[0]/,
                     "$test_name is list - has scalar index: $instruction{index} - like - $expected[0]")
                 : ok(0, "No index passed to test - list_index_like - testing - $test_name");
+        }
+        when ('list_key_scalar') {
+            return exists $instruction{key}
+                ? is( {@test}->{$instruction{key}}, $expected[0], "$test_name is list - has scalar key: $instruction{key} - is - $expected[0]")
+                : ok(0, "No key passed to test - list_key_scalar - testing - $test_name");
+        }
+        when ('list_key_ref') {
+            return exists $instruction{key}
+                ? is_deeply( {@test}->{$instruction{key}}, $expected[0],
+                        "$test_name is list - has ref key: $instruction{key} - is_deeply - ref" )
+                : ok(0, "No key passed to test - list_key_ref - testing - $test_name");
+        }
+        when ('list_key_like') {
+            return exists $instruction{key}
+                ? like( {@test}->{$instruction{key}}, qr/$expected[0]/,
+                    "$test_name is list - has scalar key: $instruction{key} - like - $expected[0]")
+                : ok(0, "No key passed to test - list_key_like - testing - $test_name");
         }
         when ('scalar') {
             return is( $test[0], $expected[0],
@@ -289,13 +318,13 @@ sub moon_test_one {
                 "$test_name is like - $expected[0]" );
         }
         when ('true') {
-            return is($test[0], 1, "$test_name is true - 1"); 
+            return is($test[0], 1, "$test_name is true - 1");
         }
         when ('false') {
             return is($test[0], 0, "$test_name is false - 0");
         }
         when ('undef') {
-            return is($test[0], undef, "$test_name is undef"); 
+            return is($test[0], undef, "$test_name is undef");
         }
         when ('render') {
             return render_me(
@@ -391,7 +420,7 @@ sub sunrise {
     my $done_testing = done_testing(shift);
     diag explain $done_testing;
     diag sprintf(
-        '                         
+        '
                                    %s
             ^^                   @@@@@@@@@
        ^^       ^^            @@@@@@@@@@@@@@@

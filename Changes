@@ -14,3 +14,12 @@ Revision history for Moonshine-Test
 
 0.05    30/01/2017
         Add tests for - undef, ref_key_scalar, ref_key_ref, ref_key_like, ref_index_scalar, ref_index_ref, ref_index_like
+
+0.06    01/02/2017
+        list_key_scalar - is - '' (requires key)
+        list_key_ref - is_deeply - [] or {} (requires key)
+        list_key_like - like - ''
+        list_index_scalar - is - '' (requires index)
+        list_index_ref - is_deeply - [] or {} (required index)
+        list_index_like - like - ''
+

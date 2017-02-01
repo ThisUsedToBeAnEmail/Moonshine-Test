@@ -562,6 +562,195 @@ check_test(
     'test mocked list_index_like no key'
 );
 
-sunrise(163, '*\o/*');
+$instance->mock('list_index', sub { return ( 'thing', { thing => 'okay' }, 'yes' ) });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_scalar',
+            instance => $instance,
+            func => 'list_index',
+            index => 0,
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_index is list - has scalar index: 0 - is - thing",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_index_scalar'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_scalar',
+            instance => $instance,
+            func => 'list_index',
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 0,
+        name => "No index passed to test - list_index_scalar - testing - function: list_index",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_index_scalar no key'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_ref',
+            instance => $instance,
+            func => 'list_index',
+            index => 1,
+            expected => { thing => 'okay' },
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_index is list - has ref index: 1 - is_deeply - ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_index_ref'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_ref',
+            instance => $instance,
+            func => 'list_index',
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 0,
+        name => "No index passed to test - list_index_ref - testing - function: list_index",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_index_ref no index'
+);
+
+$instance->mock('list_key', sub { return ( 'thing' => { thing => 'okay' }, 'yes' => 'okay something slow' ) });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_scalar',
+            instance => $instance,
+            func => 'list_key',
+            key => 'yes',
+            expected => 'okay something slow',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_key is list - has scalar key: yes - is - okay something slow",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_key_scalar'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_scalar',
+            instance => $instance,
+            func => 'list_key',
+            expected => 'thing',
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - list_key_scalar - testing - function: list_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_key_scalar no key'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_ref',
+            instance => $instance,
+            func => 'list_key',
+            key => 'thing',
+            expected => { thing => 'okay' },
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_key is list - has ref key: thing - is_deeply - ref",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_key_ref'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_ref',
+            instance => $instance,
+            func => 'list_key',
+            expected => { okay => 'thing' },
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - list_key_ref - testing - function: list_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_key_ref no key'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_like',
+            instance => $instance,
+            func => 'list_key',
+            key => 'yes',
+            expected => 'something',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_key is list - has scalar key: yes - like - something",
+        depth => 2,
+        completed => 1,
+    },
+    'test list_key_like'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_key_like',
+            instance => $instance,
+            func => 'list_key',
+            expected => 1234,
+        );
+    },
+    {
+        ok => 0,
+        name => "No key passed to test - list_key_like - testing - function: list_key",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_key_like no key'
+);
+
+sunrise(223, '*\o/*');
 
 1;
