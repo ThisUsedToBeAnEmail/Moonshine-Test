@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head1 SYNOPSIS
 
@@ -418,27 +418,27 @@ sub moon_test_one {
     moon_test(
         name => 'Checking Many Things'
         build => {
-             class => 'Moonshine::Element', 
-             args => {
+            class => 'Moonshine::Element', 
+            args => {
                 tag => 'p',
                 text => 'hello'
-             }
+            }
         },
         instructions => [
             {
                 test => 'scalar',
                 func => 'tag',
-                expected => 'hello',
+                expected => 'p',
             },
-           {
+            {
                 test => 'scalar',
                 action => 'text',
                 expected => 'hello',
-           },
-           { 
+            },
+            { 
                 test => 'render'
                 expected => '<p>hello</p>'
-           },
+            },
         ],
     );
 
@@ -447,7 +447,6 @@ sub moon_test_one {
 The tests name
 
     name => 'I rule the world',
-
 
 =head3 instance
 
@@ -524,26 +523,35 @@ sub moon_test {
     );
 
     foreach my $test ( @{ $instruction{instructions} } ) {
-        my $subtests = delete $test->{subtest};
         $test_info{tested}++;
-        $test_info{fail}++
-          unless moon_test_one(
-            instance => $instance,
-            %{$test}
-          );
-
-        if ($subtests){
+        if (my $subtests = delete $test->{subtest}){
             my $new_instance = _run_the_code({
                 instance => $instance, 
                 %{$test}
             });
+
+            $test_info{fail}++ unless 
+                moon_test_one(
+                    test => $test->{test},
+                    instance => $instance,
+                    expected => $test->{expected},
+                );
+
             my $new_instructions = {
                 instance => $new_instance,
                 instructions => $subtests,
                 name => "Subtest -> $instruction{name}",
             };
+
             moon_test($new_instructions);
+            next;
         }
+    
+        $test_info{fail}++
+          unless moon_test_one(
+            instance => $instance,
+            %{$test}
+          );
     }
 
     $test_info{ok} = $test_info{fail} ? 0 : 1;

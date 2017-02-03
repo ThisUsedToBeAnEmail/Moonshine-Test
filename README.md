@@ -4,7 +4,7 @@ Moonshine::Test - Test!
 
 # VERSION
 
-Version 0.06
+Version 0.08
 
 # SYNOPSIS
 
@@ -26,6 +26,7 @@ Version 0.06
 
 ## all
 
+- moon\_test
 - moon\_test\_one
 - render\_me
 - done\_testing
@@ -130,27 +131,27 @@ key - required when testing - ref\_key\_\*
     moon_test(
         name => 'Checking Many Things'
         build => {
-             class => 'Moonshine::Element', 
-             args => {
+            class => 'Moonshine::Element', 
+            args => {
                 tag => 'p',
                 text => 'hello'
-             }
-        }
+            }
+        },
         instructions => [
             {
                 test => 'scalar',
                 func => 'tag',
-                expected => 'hello',
+                expected => 'p',
             },
-           {
+            {
                 test => 'scalar',
                 action => 'text',
                 expected => 'hello',
-           },
-           { 
+            },
+            { 
                 test => 'render'
                 expected => '<p>hello</p>'
-           },
+            },
         ],
     );
 
@@ -205,7 +206,8 @@ Build an instance
                    test => 'scalar',
                    func => 'class',
                    expected => 'glyphicon glyphicon-search',
-                }
+                },
+                ...
             ]
         }
     ]
