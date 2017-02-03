@@ -200,7 +200,6 @@ Build an instance
             test => 'obj',
             func => 'glyphicon',
             args => { switch => 'search' },
-            expected => 'obj',
             subtest => [
                 {
                    test => 'scalar',

@@ -521,7 +521,7 @@ sub moon_test {
     );
 
     foreach my $test ( @{ $instruction{instructions} } ) {
-        my $subtests = delete $test->{subtests};
+        my $subtests = delete $test->{subtest};
         $test_info{tested}++;
         $test_info{fail}++
           unless moon_test_one(

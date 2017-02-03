@@ -20,7 +20,7 @@ moon_test(
             test => 'obj',
             func => 'div',
             expected => 'Moonshine::Element',
-            subtests => [
+            subtest => [
                 {
                     test => 'scalar',
                     func => 'tag',
