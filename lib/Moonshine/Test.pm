@@ -382,8 +382,7 @@ sub moon_test_one {
                 "$test_name is array - reference - is_deeply" );
         }
         when ('obj') {
-            return isa_ok( $test[0],
-                $expected[0],
+            return isa_ok( $test[0], $expected[0],
                 "$test_name is Object - blessed - is - $expected[0]" );
         }
         when ('like') {
@@ -524,29 +523,31 @@ sub moon_test {
 
     foreach my $test ( @{ $instruction{instructions} } ) {
         $test_info{tested}++;
-        if (my $subtests = delete $test->{subtest}){
-            my $new_instance = _run_the_code({
-                instance => $instance, 
-                %{$test}
-            });
-
-            $test_info{fail}++ unless 
-                moon_test_one(
-                    test => $test->{test},
+        if ( my $subtests = delete $test->{subtest} ) {
+            my ( $test_name, $new_instance ) = _run_the_code(
+                {
                     instance => $instance,
-                    expected => $test->{expected},
-                );
+                    %{$test}
+                }
+            );
+
+            $test_info{fail}++
+              unless moon_test_one(
+                test     => $test->{test},
+                instance => $instance,
+                expected => $test->{expected},
+              );
 
             my $new_instructions = {
-                instance => $new_instance,
+                instance     => $new_instance,
                 instructions => $subtests,
-                name => "Subtest -> $instruction{name}",
+                name         => "Subtest -> $instruction{name}",
             };
 
             moon_test($new_instructions);
             next;
         }
-    
+
         $test_info{fail}++
           unless moon_test_one(
             instance => $instance,
