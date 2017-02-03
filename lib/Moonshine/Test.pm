@@ -534,7 +534,7 @@ sub moon_test {
             $test_info{fail}++
               unless moon_test_one(
                 test     => $test->{test},
-                instance => $instance,
+                instance => $new_instance,
                 expected => $test->{expected},
               );
 
