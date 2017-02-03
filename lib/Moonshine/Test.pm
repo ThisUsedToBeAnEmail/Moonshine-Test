@@ -380,7 +380,7 @@ sub moon_test_one {
                 "$test_name is array - reference - is_deeply" );
         }
         when ('obj') {
-            return is( blessed $test[0],
+            return isa_ok( $test[0],
                 $expected[0],
                 "$test_name is Object - blessed - is - $expected[0]" );
         }
@@ -487,7 +487,6 @@ Build an instance
             test => 'obj',
             func => 'glyphicon',
             args => { switch => 'search' },
-            expected => 'obj',
             subtest => [
                 {
                    test => 'scalar',
@@ -522,12 +521,26 @@ sub moon_test {
     );
 
     foreach my $test ( @{ $instruction{instructions} } ) {
+        my $subtests = delete $test->{subtests};
         $test_info{tested}++;
         $test_info{fail}++
           unless moon_test_one(
             instance => $instance,
             %{$test}
-          ) and next;
+          );
+
+        if ($subtests){
+            my $new_instance = _run_the_code({
+                instance => $instance, 
+                %{$test}
+            });
+            my $new_instructions = {
+                instance => $new_instance,
+                instructions => $subtests,
+                name => "Subtest -> $instruction{name}",
+            };
+            moon_test($new_instructions);
+        }
     }
 
     $test_info{ok} = $test_info{fail} ? 0 : 1;

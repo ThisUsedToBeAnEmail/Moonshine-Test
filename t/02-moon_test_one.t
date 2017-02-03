@@ -146,7 +146,7 @@ check_test(
     },
     {
         ok => 1,
-        name => "function: obj is Object - blessed - is - Test::Moon",
+        name => "'function: obj is Object - blessed - is - Test::Moon' isa 'Test::Moon'",
         depth => 2,
         completed => 1,
     },
