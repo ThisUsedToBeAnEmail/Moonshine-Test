@@ -527,16 +527,9 @@ sub moon_test {
             my ( $test_name, $new_instance ) = _run_the_code(
                 {
                     instance => $instance,
-                    %{$test}
+                    (%{$test})
                 }
             );
-
-            $test_info{fail}++
-              unless moon_test_one(
-                test     => $test->{test},
-                instance => $new_instance,
-                expected => $test->{expected},
-              );
 
             my $new_instructions = {
                 instance     => $new_instance,
@@ -545,7 +538,6 @@ sub moon_test {
             };
 
             moon_test($new_instructions);
-            next;
         }
 
         $test_info{fail}++
