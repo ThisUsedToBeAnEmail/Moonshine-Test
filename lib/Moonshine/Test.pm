@@ -340,48 +340,10 @@ sub moon_test_one {
     }
 }
 
-=head2 render_me
-
-Test render directly on a Moonshine::Element.
-
-    render_me(
-        instance => $element,
-        expected => '<div>echo</div>'
-    );
-
-Or test a function..
-
-    render_me(
-        instance => $instance,
-        func => 'div',
-        args     => { data => 'echo' },
-        expected => '<div>echo</div>',
-    );
-
-=cut
-
-sub render_me {
-    my %instruction = validate_with(
-        params => \@_,
-        spec   => {
-            instance => 0,
-            func     => 0,
-            meth     => 0,
-            args     => { default => {} },
-            expected => { type => SCALAR },
-        }
-    );
-
-    my ( $test_name, $instance ) = _run_the_code( \%instruction );
-
-    return is( $instance->render,
-        $instruction{expected}, "render $test_name: $instruction{expected}" );
-}
-
-
 =head1 moon_test
-    
-    my $args = {
+ 
+    moon_test(
+        name => 'Checking Many Things'
         build => {
              class => 'Moonshine::Element', 
              args => {
@@ -390,19 +352,21 @@ sub render_me {
              }
         }
         instructions => [
+            {
+                test => 'scalar',
+                func => 'tag',
+                expected => 'hello',
+           {
+                test => 'scalar',
+                action => 'text',
+                expected => 'hello',
+           },
            { 
-                action => 'render'
-                args => {
-
-                } 
+                test => 'render'
                 expected => '<p>hello</p>'
            },
-           {
-               action => 'text',
-               expected => 'hello',
-           },
         ],
-    }
+    );
 
 =cut
 
@@ -464,6 +428,45 @@ sub _build_me {
             : $instruction{class}->$new( $instruction{args} ) 
         : $instruction{class}->$new;
 }
+
+=head2 render_me
+
+Test render directly on a Moonshine::Element.
+
+    render_me(
+        instance => $element,
+        expected => '<div>echo</div>'
+    );
+
+Or test a function..
+
+    render_me(
+        instance => $instance,
+        func => 'div',
+        args     => { data => 'echo' },
+        expected => '<div>echo</div>',
+    );
+
+=cut
+
+sub render_me {
+    my %instruction = validate_with(
+        params => \@_,
+        spec   => {
+            instance => 0,
+            func     => 0,
+            meth     => 0,
+            args     => { default => {} },
+            expected => { type => SCALAR },
+        }
+    );
+
+    my ( $test_name, $instance ) = _run_the_code( \%instruction );
+
+    return is( $instance->render,
+        $instruction{expected}, "render $test_name: $instruction{expected}" );
+}
+
 
 sub _run_the_code {
     my $instruction = shift;

@@ -125,6 +125,34 @@ index - required when testing - ref\_index\_\*
 
 key - required when testing - ref\_key\_\*
 
+# moon\_test
+
+    moon_test(
+        name => 'Checking Many Things'
+        build => {
+             class => 'Moonshine::Element', 
+             args => {
+                tag => 'p',
+                text => 'hello'
+             }
+        }
+        instructions => [
+            {
+                test => 'scalar',
+                func => 'tag',
+                expected => 'hello',
+           {
+                test => 'scalar',
+                action => 'text',
+                expected => 'hello',
+           },
+           { 
+                test => 'render'
+                expected => '<p>hello</p>'
+           },
+        ],
+    );
+
 ## render\_me
 
 Test render directly on a Moonshine::Element.
