@@ -125,7 +125,7 @@ index - required when testing - ref\_index\_\*
 
 key - required when testing - ref\_key\_\*
 
-# moon\_test
+## moon\_test
 
     moon_test(
         name => 'Checking Many Things'
@@ -141,6 +141,7 @@ key - required when testing - ref\_key\_\*
                 test => 'scalar',
                 func => 'tag',
                 expected => 'hello',
+            },
            {
                 test => 'scalar',
                 action => 'text',
@@ -152,6 +153,63 @@ key - required when testing - ref\_key\_\*
            },
         ],
     );
+
+### name
+
+The tests name
+
+    name => 'I rule the world',
+
+### instance
+
+    my $instance = My::Object->new();
+    instance => $instance,
+
+### build
+
+Build an instance
+
+    build => {
+        class => 'My::Object',
+        args  => { },
+    },
+
+### instructions
+
+    instructions => [
+        {
+            test => 'scalar',
+            func => 'tag',
+            expected => 'hello',
+        },
+        {
+            test => 'scalar',
+            action => 'text',
+            expected => 'hello',
+        },
+        { 
+            test => 'render'
+            expected => '<p>hello</p>'
+        },
+    ],
+
+### subtest
+
+    instructions => [
+        {
+            test => 'obj',
+            func => 'glyphicon',
+            args => { switch => 'search' },
+            expected => 'obj',
+            subtest => [
+                {
+                   test => 'scalar',
+                   func => 'class',
+                   expected => 'glyphicon glyphicon-search',
+                }
+            ]
+        }
+    ]
 
 ## render\_me
 

@@ -4,7 +4,7 @@ use Moonshine::Test qw/:all/;
 use Test::MockObject;
 
 moon_test(
-    name => 'build me, build me, build me',
+    name         => 'build me, build me, build me',
     instructions => [
         {
             test => 'obj',

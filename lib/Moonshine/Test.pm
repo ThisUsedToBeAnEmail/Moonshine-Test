@@ -231,74 +231,145 @@ sub moon_test_one {
         }
         when ('ref_key_scalar') {
             return exists $instruction{key}
-                ? is( $test[0]->{$instruction{key}}, $expected[0], "$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]")
-                : ok(0, "No key passed to test - ref_key_scalar - testing - $test_name");
+              ? is(
+                $test[0]->{ $instruction{key} },
+                $expected[0],
+"$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]"
+              )
+              : ok(
+                0,
+                "No key passed to test - ref_key_scalar - testing - $test_name"
+              );
         }
         when ('ref_key_like') {
             return exists $instruction{key}
-                ? like( $test[0]->{$instruction{key}}, qr/$expected[0]/, "$test_name is ref - has scalar key: $instruction{key} - like - $expected[0]")
-                : ok(0, "No key passed to test - ref_key_like - testing - $test_name");
+              ? like(
+                $test[0]->{ $instruction{key} },
+                qr/$expected[0]/,
+"$test_name is ref - has scalar key: $instruction{key} - like - $expected[0]"
+              )
+              : ok( 0,
+                "No key passed to test - ref_key_like - testing - $test_name" );
         }
         when ('ref_key_ref') {
             return exists $instruction{key}
-                ? is_deeply( $test[0]->{$instruction{key}}, $expected[0],
-                        "$test_name is ref - has ref key: $instruction{key} - is_deeply - ref" )
-                : ok(0, "No key passed to test - ref_key_ref - testing - $test_name");
+              ? is_deeply(
+                $test[0]->{ $instruction{key} },
+                $expected[0],
+"$test_name is ref - has ref key: $instruction{key} - is_deeply - ref"
+              )
+              : ok( 0,
+                "No key passed to test - ref_key_ref - testing - $test_name" );
         }
         when ('ref_index_scalar') {
             return exists $instruction{index}
-                ? is( $test[0]->[$instruction{index}], $expected[0], "$test_name is ref - has scalar index: $instruction{index} - is - $expected[0]")
-                : ok(0, "No index passed to test - ref_index_scalar - testing - $test_name");
+              ? is(
+                $test[0]->[ $instruction{index} ],
+                $expected[0],
+"$test_name is ref - has scalar index: $instruction{index} - is - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - ref_index_scalar - testing - $test_name"
+              );
         }
         when ('ref_index_ref') {
             return exists $instruction{index}
-                ? is_deeply( $test[0]->[$instruction{index}], $expected[0],
-                        "$test_name is ref - has ref index: $instruction{index} - is_deeply - ref" )
-                : ok(0, "No index passed to test - ref_index_ref - testing - $test_name");
+              ? is_deeply(
+                $test[0]->[ $instruction{index} ],
+                $expected[0],
+"$test_name is ref - has ref index: $instruction{index} - is_deeply - ref"
+              )
+              : ok(
+                0,
+                "No index passed to test - ref_index_ref - testing - $test_name"
+              );
         }
         when ('ref_index_like') {
             return exists $instruction{index}
-                ? like( $test[0]->[$instruction{index}], qr/$expected[0]/,
-                    "$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]")
-                : ok(0, "No index passed to test - ref_index_like - testing - $test_name");
+              ? like(
+                $test[0]->[ $instruction{index} ],
+                qr/$expected[0]/,
+"$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - ref_index_like - testing - $test_name"
+              );
         }
         when ('list_index_scalar') {
             return exists $instruction{index}
-                ? is( $test[$instruction{index}], $expected[0], "$test_name is list - has scalar index: $instruction{index} - is - $expected[0]")
-                : ok(0, "No index passed to test - list_index_scalar - testing - $test_name");
+              ? is(
+                $test[ $instruction{index} ],
+                $expected[0],
+"$test_name is list - has scalar index: $instruction{index} - is - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - list_index_scalar - testing - $test_name"
+              );
         }
         when ('list_index_ref') {
             return exists $instruction{index}
-                ? is_deeply( $test[$instruction{index}], $expected[0],
-                        "$test_name is list - has ref index: $instruction{index} - is_deeply - ref" )
-                : ok(0, "No index passed to test - list_index_ref - testing - $test_name");
+              ? is_deeply(
+                $test[ $instruction{index} ],
+                $expected[0],
+"$test_name is list - has ref index: $instruction{index} - is_deeply - ref"
+              )
+              : ok(
+                0,
+"No index passed to test - list_index_ref - testing - $test_name"
+              );
         }
         when ('list_index_like') {
             return exists $instruction{index}
-                ? like( $test[$instruction{index}], qr/$expected[0]/,
-                    "$test_name is list - has scalar index: $instruction{index} - like - $expected[0]")
-                : ok(0, "No index passed to test - list_index_like - testing - $test_name");
+              ? like(
+                $test[ $instruction{index} ],
+                qr/$expected[0]/,
+"$test_name is list - has scalar index: $instruction{index} - like - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - list_index_like - testing - $test_name"
+              );
         }
         when ('list_key_scalar') {
             return exists $instruction{key}
-                ? is( {@test}->{$instruction{key}}, $expected[0], "$test_name is list - has scalar key: $instruction{key} - is - $expected[0]")
-                : ok(0, "No key passed to test - list_key_scalar - testing - $test_name");
+              ? is(
+                {@test}->{ $instruction{key} },
+                $expected[0],
+"$test_name is list - has scalar key: $instruction{key} - is - $expected[0]"
+              )
+              : ok(
+                0,
+                "No key passed to test - list_key_scalar - testing - $test_name"
+              );
         }
         when ('list_key_ref') {
             return exists $instruction{key}
-                ? is_deeply( {@test}->{$instruction{key}}, $expected[0],
-                        "$test_name is list - has ref key: $instruction{key} - is_deeply - ref" )
-                : ok(0, "No key passed to test - list_key_ref - testing - $test_name");
+              ? is_deeply(
+                {@test}->{ $instruction{key} },
+                $expected[0],
+"$test_name is list - has ref key: $instruction{key} - is_deeply - ref"
+              )
+              : ok( 0,
+                "No key passed to test - list_key_ref - testing - $test_name" );
         }
         when ('list_key_like') {
             return exists $instruction{key}
-                ? like( {@test}->{$instruction{key}}, qr/$expected[0]/,
-                    "$test_name is list - has scalar key: $instruction{key} - like - $expected[0]")
-                : ok(0, "No key passed to test - list_key_like - testing - $test_name");
+              ? like(
+                {@test}->{ $instruction{key} },
+                qr/$expected[0]/,
+"$test_name is list - has scalar key: $instruction{key} - like - $expected[0]"
+              )
+              : ok(
+                0,
+                "No key passed to test - list_key_like - testing - $test_name"
+              );
         }
         when ('scalar') {
-            return is( $test[0], $expected[0],
-                sprintf "%s is scalar - is - %s", $test_name, $expected[0]);
+            return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
+                $test_name, $expected[0] );
         }
         when ('hash') {
             return is_deeply( {@test}, $expected[0],
@@ -318,13 +389,13 @@ sub moon_test_one {
                 "$test_name is like - $expected[0]" );
         }
         when ('true') {
-            return is($test[0], 1, "$test_name is true - 1");
+            return is( $test[0], 1, "$test_name is true - 1" );
         }
         when ('false') {
-            return is($test[0], 0, "$test_name is false - 0");
+            return is( $test[0], 0, "$test_name is false - 0" );
         }
         when ('undef') {
-            return is($test[0], undef, "$test_name is undef");
+            return is( $test[0], undef, "$test_name is undef" );
         }
         when ('render') {
             return render_me(
@@ -340,7 +411,7 @@ sub moon_test_one {
     }
 }
 
-=head1 moon_test
+=head2 moon_test
  
     moon_test(
         name => 'Checking Many Things'
@@ -356,6 +427,7 @@ sub moon_test_one {
                 test => 'scalar',
                 func => 'tag',
                 expected => 'hello',
+            },
            {
                 test => 'scalar',
                 action => 'text',
@@ -368,44 +440,103 @@ sub moon_test_one {
         ],
     );
 
+=head3 name
+
+The tests name
+
+    name => 'I rule the world',
+
+
+=head3 instance
+
+    my $instance = My::Object->new();
+    instance => $instance,
+
+=head3 build
+
+Build an instance
+
+    build => {
+        class => 'My::Object',
+        args  => { },
+    },
+
+=head3 instructions
+
+    instructions => [
+        {
+            test => 'scalar',
+            func => 'tag',
+            expected => 'hello',
+        },
+        {
+            test => 'scalar',
+            action => 'text',
+            expected => 'hello',
+        },
+        { 
+            test => 'render'
+            expected => '<p>hello</p>'
+        },
+    ],
+
+=head3 subtest
+
+    instructions => [
+        {
+            test => 'obj',
+            func => 'glyphicon',
+            args => { switch => 'search' },
+            expected => 'obj',
+            subtest => [
+                {
+                   test => 'scalar',
+                   func => 'class',
+                   expected => 'glyphicon glyphicon-search',
+                }
+            ]
+        }
+    ]
+
 =cut
 
 sub moon_test {
     my %instruction = validate_with(
         params => \@_,
         spec   => {
-            build => { type => HASHREF, optional => 1, },
-            instance => { type => HASHREF, optional => 1, },
+            build        => { type => HASHREF, optional => 1, },
+            instance     => { type => HASHREF, optional => 1, },
             instructions => { type => ARRAYREF },
-            name => { type => SCALAR },
+            name         => { type => SCALAR },
         }
     );
 
-    my $instance = $instruction{build} 
-        ? _build_me($instruction{build}) 
-        : $instruction{instance};
-    
+    my $instance =
+      $instruction{build}
+      ? _build_me( $instruction{build} )
+      : $instruction{instance};
+
     my %test_info = (
-        fail => 0,
+        fail   => 0,
         tested => 0,
     );
-    
-    foreach my $test (@{ $instruction{instructions} }) {
-        $test_info{tested}++;   
-        $test_info{fail}++ unless
-             moon_test_one(
-                instance => $instance,
-                %{ $test }
-            ) and next;
+
+    foreach my $test ( @{ $instruction{instructions} } ) {
+        $test_info{tested}++;
+        $test_info{fail}++
+          unless moon_test_one(
+            instance => $instance,
+            %{$test}
+          ) and next;
     }
-    
+
     $test_info{ok} = $test_info{fail} ? 0 : 1;
-    return ok($test_info{ok}, sprintf( 
-        "moon_test: %s - tested %d instructions - success: %d - failure: %d",
-            $instruction{name},
-            $test_info{tested},
-            ($test_info{tested} - $test_info{fail}),
-            $test_info{fail},
+    return ok(
+        $test_info{ok},
+        sprintf(
+"moon_test: %s - tested %d instructions - success: %d - failure: %d",
+            $instruction{name},                        $test_info{tested},
+            ( $test_info{tested} - $test_info{fail} ), $test_info{fail},
         )
     );
 }
@@ -413,20 +544,17 @@ sub moon_test {
 sub _build_me {
     my %instruction = validate_with(
         params => \@_,
-        spec => {
+        spec   => {
             class => 1,
-            new => { default => 'new' },
-            args => 0,
-            args_list => 0,
+            new   => { default => 'new' },
+            args  => 0,
         }
     );
 
     my $new = $instruction{new};
-    return $instruction{args} 
-        ? $instruction{args_list} 
-            ? $instruction{class}->$new( @{ $instruction{args} } )
-            : $instruction{class}->$new( $instruction{args} ) 
-        : $instruction{class}->$new;
+    return $instruction{args}
+      ? $instruction{class}->$new( $instruction{args} )
+      : $instruction{class}->$new;
 }
 
 =head2 render_me
@@ -467,7 +595,6 @@ sub render_me {
         $instruction{expected}, "render $test_name: $instruction{expected}" );
 }
 
-
 sub _run_the_code {
     my $instruction = shift;
 
@@ -496,7 +623,8 @@ sub _run_the_code {
         return ( $test_name, $instruction->{instance} );
     }
 
-    die('instruction passed to _run_the_code must have a func, meth or instance'
+    die(
+        'instruction passed to _run_the_code must have a func, meth or instance'
     );
 }
 
@@ -509,8 +637,7 @@ sub _run_the_code {
 sub sunrise {
     my $done_testing = done_testing(shift);
     diag explain $done_testing;
-    diag sprintf(
-        '
+    diag sprintf( '
                                    %s
             ^^                   @@@@@@@@@
        ^^       ^^            @@@@@@@@@@@@@@@
@@ -522,8 +649,7 @@ sub sunrise {
    -  --     -         -      ------  -- ---       -- - --  -- -
  -  -       - -      -           -- ------  -      --  -             --
        -             -        -      -      --   -             -',
-        shift // ' \o/ '
-    );
+        shift // ' \o/ ' );
     return $done_testing;
 }
 
