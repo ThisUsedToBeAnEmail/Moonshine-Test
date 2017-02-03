@@ -7,6 +7,9 @@ t/00-load.t
 t/01-render_me.t
 t/02-moon_test_one.t
 t/03-_run_the_code.t
+t/04-moon_test.t
+t/05-_build_me.t
+t/06-moon_test_subtest.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t

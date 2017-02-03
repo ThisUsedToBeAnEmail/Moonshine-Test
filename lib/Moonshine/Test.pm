@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 SYNOPSIS
 
@@ -51,6 +51,8 @@ our $VERSION = '0.06';
 =head2 all
 
 =over
+
+=item moon_test
 
 =item moon_test_one
 
@@ -421,7 +423,7 @@ sub moon_test_one {
                 tag => 'p',
                 text => 'hello'
              }
-        }
+        },
         instructions => [
             {
                 test => 'scalar',
@@ -492,7 +494,8 @@ Build an instance
                    test => 'scalar',
                    func => 'class',
                    expected => 'glyphicon glyphicon-search',
-                }
+                },
+                ...
             ]
         }
     ]
@@ -560,7 +563,7 @@ sub _build_me {
         spec   => {
             class => 1,
             new   => { default => 'new' },
-            args  => 0,
+            args  => { optional => 1, type => HASHREF },
         }
     );
 
