@@ -24,4 +24,10 @@ Revision history for Moonshine-Test
         list_index_like - like - ''
 
 0.07    03/02/2017
-        moon_test( instance => $obj, instructions => [ ] ) 
+        moon_test( instance => $obj, instructions => [ ] )
+        
+0.08    03/02/2017
+        moon_test() 
+
+0.09    03/02/2017
+        Remove some debugging, add back the test that I've been fighting with all evening. 

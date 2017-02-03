@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 =head1 SYNOPSIS
 
@@ -371,12 +371,6 @@ sub moon_test_one {
               );
         }
         when ('scalar') {
-            if ($instruction{func} eq 'tag') {
-                use Data::Dumper;
-                warn Dumper $test_name;
-                warn Dumper \@test;
-            }
-            
             return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
                 $test_name, $expected[0] );
         }
@@ -518,8 +512,6 @@ sub moon_test {
         }
     );
 
-    use Data::Dumper;
-
     my $instance =
       $instruction{build}
       ? _build_me( $instruction{build} )
@@ -540,12 +532,20 @@ sub moon_test {
                 }
             );
 
+            $test_info{fail}++
+                unless moon_test_one(
+                    instance => $new_instance,
+                    test => $test->{test},
+                    expected => $test->{expected},
+                );
+
+
             my $new_instructions = {
                 instance     => $new_instance,
                 instructions => $subtests,
                 name         => "Subtest -> $instruction{name} -> $test_name",
             };
-            warn Dumper 'I leave here';
+                        
             moon_test(%{$new_instructions});
             next;
         }

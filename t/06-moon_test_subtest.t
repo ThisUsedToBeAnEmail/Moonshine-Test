@@ -36,6 +36,6 @@ moon_test(
     ],
 );
 
-sunrise(4);
+sunrise(5);
 
 1;
