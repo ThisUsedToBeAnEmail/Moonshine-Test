@@ -8,10 +8,10 @@ use Params::Validate qw/:all/;
 use B qw/svref_2object/;
 use Exporter 'import';
 
-our @EXPORT = qw/render_me moon_test_one sunrise/;
+our @EXPORT = qw/render_me moon_test moon_test_one sunrise/;
 
 our %EXPORT_TAGS = (
-    all     => [qw/render_me moon_test_one sunrise/],
+    all     => [qw/render_me moon_test moon_test_one sunrise/],
     element => [qw/render_me sunrise/]
 );
 
@@ -376,6 +376,95 @@ sub render_me {
 
     return is( $instance->render,
         $instruction{expected}, "render $test_name: $instruction{expected}" );
+}
+
+
+=head1 moon_test
+    
+    my $args = {
+        build => {
+             class => 'Moonshine::Element', 
+             args => {
+                tag => 'p',
+                text => 'hello'
+             }
+        }
+        instructions => [
+           { 
+                action => 'render'
+                args => {
+
+                } 
+                expected => '<p>hello</p>'
+           },
+           {
+               action => 'text',
+               expected => 'hello',
+           },
+        ],
+    }
+
+=cut
+
+sub moon_test {
+    my %instruction = validate_with(
+        params => \@_,
+        spec   => {
+            build => { type => HASHREF, optional => 1, },
+            instance => { type => HASHREF, optional => 1, },
+            instructions => { type => ARRAYREF },
+            name => { type => SCALAR },
+        }
+    );
+
+    my $instance = $instruction{build} 
+        ? build_me($instruction{build}) 
+        : $instruction{instance};
+    
+    $instance or return ok(0, 'No instance or build args passed to moon_test');
+    
+    my %test_info = (
+        fail => 0,
+        tested => 0,
+    );
+    
+    foreach my $test (@{ $instruction{instructions} }) {
+        $test_info{tested}++;   
+        $test_info{fail}++ unless
+             moon_test_one(
+                instance => $instance,
+                %{ $test }
+            ) and next;
+    }
+    
+    $test_info{ok} = $test_info{fail} ? 0 : 1;
+    return ok($test_info{ok}, sprintf( 
+        "moon_test: %s - tested %d instructions - success: %d - failure: %d",
+            $instruction{name},
+            $test_info{tested},
+            ($test_info{tested} - $test_info{fail}),
+            $test_info{fail},
+        )
+    );
+}
+
+sub build_me {
+    my %instruction = validate_with(
+        params => \@_,
+        spec => {
+            class => 1,
+            new => { default => 'new' },
+            args => 0,
+            args_list => 0,
+        }
+    );
+
+    my $new = $instruction{new};
+    return $instruction{args} 
+        ? $instruction{args_list} 
+            ? $instruction{class}->$new( @{ $instruction{args} } )
+            : $instruction{class}->$new( $instruction{args} ) 
+        : $instruction{class}->$new;
 }
 
 sub _run_the_code {
