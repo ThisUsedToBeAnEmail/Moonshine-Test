@@ -202,6 +202,7 @@ sub moon_test_one {
             catch     => 0,
             key       => 0,
             index     => 0,
+            built     => 0,
         }
     );
 
@@ -370,6 +371,12 @@ sub moon_test_one {
               );
         }
         when ('scalar') {
+            if ($instruction{func} eq 'tag') {
+                use Data::Dumper;
+                warn Dumper $test_name;
+                warn Dumper \@test;
+            }
+            
             return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
                 $test_name, $expected[0] );
         }
@@ -511,6 +518,8 @@ sub moon_test {
         }
     );
 
+    use Data::Dumper;
+
     my $instance =
       $instruction{build}
       ? _build_me( $instruction{build} )
@@ -527,17 +536,18 @@ sub moon_test {
             my ( $test_name, $new_instance ) = _run_the_code(
                 {
                     instance => $instance,
-                    (%{$test})
+                    %{$test}
                 }
             );
 
             my $new_instructions = {
                 instance     => $new_instance,
                 instructions => $subtests,
-                name         => "Subtest -> $instruction{name}",
+                name         => "Subtest -> $instruction{name} -> $test_name",
             };
-
-            moon_test($new_instructions);
+            warn Dumper 'I leave here';
+            moon_test(%{$new_instructions});
+            next;
         }
 
         $test_info{fail}++
@@ -618,14 +628,17 @@ sub _run_the_code {
     my $test_name;
     if ( my $func = $instruction->{func} ) {
         $test_name = "function: ${func}";
-        return defined $instruction->{args_list}
-          ? (
-            $test_name,
-            $instruction->{instance}->$func( @{ $instruction->{args} } )
-          )
-          : (
-            $test_name, $instruction->{instance}->$func( $instruction->{args} )
-          );
+        
+        return defined $instruction->{args} 
+            ? defined $instruction->{args_list}
+                ? (
+                    $test_name,
+                    $instruction->{instance}->$func( @{ $instruction->{args} } )
+                  )
+                : (
+                    $test_name, $instruction->{instance}->$func( $instruction->{args} // {})
+                  )
+            : ( $test_name, $instruction->{instance}->$func );
     }
     elsif ( my $meth = $instruction->{meth} ) {
         my $meth_name = svref_2object($meth)->GV->NAME;
