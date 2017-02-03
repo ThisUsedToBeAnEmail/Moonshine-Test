@@ -418,10 +418,8 @@ sub moon_test {
     );
 
     my $instance = $instruction{build} 
-        ? build_me($instruction{build}) 
+        ? _build_me($instruction{build}) 
         : $instruction{instance};
-    
-    $instance or return ok(0, 'No instance or build args passed to moon_test');
     
     my %test_info = (
         fail => 0,
@@ -448,7 +446,7 @@ sub moon_test {
     );
 }
 
-sub build_me {
+sub _build_me {
     my %instruction = validate_with(
         params => \@_,
         spec => {
