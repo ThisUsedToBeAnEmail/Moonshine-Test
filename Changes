@@ -23,3 +23,5 @@ Revision history for Moonshine-Test
         list_index_ref - is_deeply - [] or {} (required index)
         list_index_like - like - ''
 
+0.07    03/02/2017
+        moon_test( instance => $obj, instructions => [ ] ) 
