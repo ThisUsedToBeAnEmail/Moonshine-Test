@@ -30,4 +30,7 @@ Revision history for Moonshine-Test
         moon_test() 
 
 0.09    03/02/2017
-        Remove some debugging, add back the test that I've been fighting with all evening. 
+        Remove some debugging, add back the test that I've been fighting with all evening.
+        
+0.10    05/02/2017
+        Set MINIMUM_PERL_VERSION to 5.010. 
