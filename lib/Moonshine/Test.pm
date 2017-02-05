@@ -16,7 +16,7 @@ our %EXPORT_TAGS = (
 );
 
 use feature qw/switch/;
-no if $] >= 5.018, warnings => 'experimental::smartmatch';
+no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 =head1 NAME
 
@@ -24,11 +24,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =cut
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 =head1 SYNOPSIS
 
@@ -109,7 +109,7 @@ moon_test_one can currently run the following tests.
 
 =item array - is_deeply - expected [],
 
-=item obj - blessed /o\ - expected '',
+=item obj - isa_ok - expected '',
 
 =item like - like - '',
 
@@ -762,7 +762,6 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 =cut
 
