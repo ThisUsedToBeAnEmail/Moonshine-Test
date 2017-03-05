@@ -765,7 +765,7 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked list_key_like no key'
+    'test mocked ok'
 );
 
 check_test(
@@ -782,9 +782,31 @@ check_test(
         depth => 2,
         completed => 1,
     },
-    'test mocked list_key_like no key'
+    'test mocked skip'
 );
 
-sunrise(235, confused_scratch);
+
+$instance->mock('ref_ind_obj', sub { return [ (bless {}, 'Thing') ]; });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_index_obj',
+            instance => $instance,
+            index => 0,
+            func => 'ref_ind_obj',
+            expected => 'Thing',
+        );
+    },
+    {
+        ok => 1,
+        name => "'function: ref_ind_obj is ref - has obj index: 0 - isa_ok - Thing' isa 'Thing'",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_index_obj'
+);
+
+sunrise(241, confused_scratch);
 
 1;

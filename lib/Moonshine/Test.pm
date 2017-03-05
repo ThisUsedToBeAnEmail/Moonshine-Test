@@ -136,6 +136,8 @@ moon_test_one can currently run the following tests.
 
 =item ref_index_like - like - ''
 
+=item ref_index_obj - isa_ok - ''
+
 =item list_key_scalar - is - '' (requires key)
 
 =item list_key_ref - is_deeply - [] or {} (requires key)
@@ -145,6 +147,8 @@ moon_test_one can currently run the following tests.
 =item list_index_scalar - is - '' (requires index)
 
 =item list_index_ref - is_deeply - [] or {} (required index)
+
+=item list_index_obj - isa_ok - ''
 
 =item list_index_like - like - ''
 
@@ -307,6 +311,18 @@ sub moon_test_one {
 "No index passed to test - ref_index_like - testing - $test_name"
               );
         }
+        when ('ref_index_obj') {
+            return exists $instruction{index}
+              ? isa_ok(
+                $test[0]->[ $instruction{index} ],
+                $expected[0],
+"$test_name is ref - has obj index: $instruction{index} - isa_ok - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - ref_index_obj - testing - $test_name"
+              );
+        }
         when ('list_index_scalar') {
             return exists $instruction{index}
               ? is(
@@ -341,6 +357,18 @@ sub moon_test_one {
               : ok(
                 0,
 "No index passed to test - list_index_like - testing - $test_name"
+              );
+        }
+        when ('list_index_obj') {
+             return exists $instruction{index}
+              ? isa_ok(
+                $test[ $instruction{index} ],
+                $expected[0],
+"$test_name is list - has obj index: $instruction{index} - isa_ok - $expected[0]"
+              )
+              : ok(
+                0,
+"No index passed to test - list_index_obj - testing - $test_name"
               );
         }
         when ('list_key_scalar') {
@@ -519,7 +547,7 @@ sub moon_test {
         params => \@_,
         spec   => {
             build        => { type => HASHREF, optional => 1, },
-            instance     => { type => HASHREF, optional => 1, },
+            instance     => { optional => 1, },
             instructions => { type => ARRAYREF },
             name         => { type => SCALAR },
         }
