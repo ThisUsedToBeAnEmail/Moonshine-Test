@@ -33,4 +33,7 @@ Revision history for Moonshine-Test
         Remove some debugging, add back the test that I've been fighting with all evening.
         
 0.10    05/02/2017
-        Set MINIMUM_PERL_VERSION to 5.010. 
+        Set MINIMUM_PERL_VERSION to 5.010.
+        
+0.12    05/03/2017
+        Adds - tests - ok and skip
