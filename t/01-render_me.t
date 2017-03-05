@@ -1,6 +1,6 @@
 use Test::Tester tests => 19;
 
-use Moonshine::Test qw/:all/;
+use Moonshine::Test qw/:element :emo/;
 use Test::MockObject;
 
 (my $element = Test::MockObject->new)

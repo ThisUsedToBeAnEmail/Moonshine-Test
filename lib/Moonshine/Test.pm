@@ -14,7 +14,8 @@ our @EXPORT = qw/render_me moon_test moon_test_one sunrise/;
 our @EXPORT_OK = (qw/render_me moon_test moon_test_one sunrise/, @EMO);
 our %EXPORT_TAGS = (
     all     => [qw/render_me moon_test moon_test_one sunrise/, @EMO],
-    element => [qw/render_me sunrise/]
+    element => [qw/render_me sunrise/],
+    emo     => [@EMO],
 );
 
 use feature qw/switch/;
@@ -26,11 +27,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
