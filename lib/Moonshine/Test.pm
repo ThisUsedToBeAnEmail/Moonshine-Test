@@ -7,11 +7,13 @@ use Scalar::Util qw/blessed/;
 use Params::Validate qw/:all/;
 use B qw/svref_2object/;
 use Exporter 'import';
+use Acme::AsciiEmoji;
 
+our @EMO = @Acme::AsciiEmoji::EXPORT_OK;
 our @EXPORT = qw/render_me moon_test moon_test_one sunrise/;
-
+our @EXPORT_OK = (qw/render_me moon_test moon_test_one sunrise/, @EMO);
 our %EXPORT_TAGS = (
-    all     => [qw/render_me moon_test moon_test_one sunrise/],
+    all     => [qw/render_me moon_test moon_test_one sunrise/, @EMO],
     element => [qw/render_me sunrise/]
 );
 
@@ -668,7 +670,7 @@ sub sunrise {
     my $done_testing = done_testing(shift);
     diag explain $done_testing;
     diag sprintf( '
-                                   %s
+                                  %s
             ^^                   @@@@@@@@@
        ^^       ^^            @@@@@@@@@@@@@@@
                             @@@@@@@@@@@@@@@@@@              ^^
@@ -679,7 +681,7 @@ sub sunrise {
    -  --     -         -      ------  -- ---       -- - --  -- -
  -  -       - -      -           -- ------  -      --  -             --
        -             -        -      -      --   -             -',
-        shift // ' \o/ ' );
+        shift // '  \o/  ' );
     return $done_testing;
 }
 

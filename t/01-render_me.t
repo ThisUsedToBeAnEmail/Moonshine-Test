@@ -1,6 +1,6 @@
 use Test::Tester tests => 19;
 
-use Moonshine::Test qw/:element/;
+use Moonshine::Test qw/:all/;
 use Test::MockObject;
 
 (my $element = Test::MockObject->new)
@@ -84,6 +84,6 @@ check_test(
     'test broken()'
 );
 
-sunrise();
+sunrise(19, winning);
 
 1;

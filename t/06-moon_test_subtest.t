@@ -36,6 +36,6 @@ moon_test(
     ],
 );
 
-sunrise(5);
+sunrise(5, flexing);
 
 1;

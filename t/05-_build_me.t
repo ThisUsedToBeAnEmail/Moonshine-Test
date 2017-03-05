@@ -33,6 +33,6 @@ moon_test(
     ],
 );
 
-sunrise(4);
+sunrise(4, chan);
 
 1;

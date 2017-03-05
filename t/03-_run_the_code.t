@@ -44,6 +44,6 @@ moon_test_one(
     expected => qr/instruction passed to _run_the_code must have a func, meth or instance/,
 );
 
-sunrise(3);
+sunrise(3, strut);
 
 1;

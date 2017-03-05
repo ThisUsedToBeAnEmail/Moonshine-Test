@@ -751,6 +751,6 @@ check_test(
     'test mocked list_key_like no key'
 );
 
-sunrise(223, '*\o/*');
+sunrise(223, confused_scratch);
 
 1;

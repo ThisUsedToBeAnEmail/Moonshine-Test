@@ -484,6 +484,6 @@ check_tests(
     "moon_test test"
 );
 
-sunrise( 82, '*\o/*' );
+sunrise( 82, touchy);
 
 1;
