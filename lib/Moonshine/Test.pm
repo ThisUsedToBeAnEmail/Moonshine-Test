@@ -104,6 +104,8 @@ moon_test_one can currently run the following tests.
 
 =over
 
+=item ok - ok - a true value 
+
 =item ref - is_deeply - expected [] or {}
 
 =item scalar - is - expected '',
@@ -145,6 +147,8 @@ moon_test_one can currently run the following tests.
 =item list_index_ref - is_deeply - [] or {} (required index)
 
 =item list_index_like - like - ''
+
+=item skip - ok(1)
 
 =back
 
@@ -409,7 +413,7 @@ sub moon_test_one {
             );
         }
         when ('ok') {
-            return ok($test[0], "$test_name is ok");
+            return ok(@test, "$test_name is ok");
         }
         when ('skip') {
             return ok(1, "$test_name - skip");

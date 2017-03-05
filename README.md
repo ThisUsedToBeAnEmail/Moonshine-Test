@@ -4,7 +4,7 @@ Moonshine::Test - Test!
 
 # VERSION
 
-Version 0.08
+Version 0.11
 
 # SYNOPSIS
 
@@ -63,11 +63,12 @@ Valid instructions moon\_test\_one accepts
 
 moon\_test\_one can currently run the following tests.
 
+- ok - ok - a true value 
 - ref - is\_deeply - expected \[\] or {}
 - scalar - is - expected '',
 - hash - is\_deeply - expected {},
 - array - is\_deeply - expected \[\],
-- obj - blessed /o\\ - expected '',
+- obj - isa\_ok - expected '',
 - like - like - '',
 - true - is - 1,
 - false - is - 0,
@@ -84,6 +85,7 @@ moon\_test\_one can currently run the following tests.
 - list\_index\_scalar - is - '' (requires index)
 - list\_index\_ref - is\_deeply - \[\] or {} (required index)
 - list\_index\_like - like - ''
+- skip - ok(1)
 
 ### catch
 
