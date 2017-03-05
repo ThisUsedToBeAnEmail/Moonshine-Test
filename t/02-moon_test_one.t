@@ -828,6 +828,42 @@ check_test(
     'test mocked list_index_obj'
 );
 
-sunrise(247, confused_scratch);
+check_test(
+    sub {
+        moon_test_one(
+            test => 'count',
+            instance => $instance,
+            func => 'list_ind_obj',
+            expected => 1,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_ind_obj is list - count - is - 1",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked count'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ref_count',
+            instance => $instance,
+            func => 'ref_ind_obj',
+            expected => 1,
+        );
+    },
+    {
+        ok => 1,
+        name => "function: ref_ind_obj is ref - count - is - 1",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked ref_count'
+);
+
+sunrise(259, confused_scratch);
 
 1;

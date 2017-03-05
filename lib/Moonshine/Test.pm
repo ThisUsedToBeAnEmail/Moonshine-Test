@@ -405,6 +405,20 @@ sub moon_test_one {
                 "No key passed to test - list_key_like - testing - $test_name"
               );
         }
+        when ('count') {
+             return is(
+                scalar @test,
+                $expected[0],
+"$test_name is list - count - is - $expected[0]"
+              );
+        }
+        when ('ref_count') {
+             return is(
+                scalar @{ $test[0] },
+                $expected[0],
+"$test_name is ref - count - is - $expected[0]"
+              );
+        }
         when ('scalar') {
             return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
                 $test_name, $expected[0] );
