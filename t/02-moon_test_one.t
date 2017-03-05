@@ -807,6 +807,27 @@ check_test(
     'test mocked ref_index_obj'
 );
 
-sunrise(241, confused_scratch);
+$instance->mock('list_ind_obj', sub { return ( (bless {}, 'Thing') ); });
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'list_index_obj',
+            instance => $instance,
+            index => 0,
+            func => 'list_ind_obj',
+            expected => 'Thing',
+        );
+    },
+    {
+        ok => 1,
+        name => "'function: list_ind_obj is list - has obj index: 0 - isa_ok - Thing' isa 'Thing'",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_index_obj'
+);
+
+sunrise(247, confused_scratch);
 
 1;
