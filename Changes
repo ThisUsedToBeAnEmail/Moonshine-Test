@@ -37,3 +37,7 @@ Revision history for Moonshine-Test
         
 0.12    05/03/2017
         Adds - tests - ok and skip
+
+0.13    05/03/2017
+        Adds - tests - list_index_obj, ref_index_obj, count, count_ref
+

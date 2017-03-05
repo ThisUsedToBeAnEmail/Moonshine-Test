@@ -162,6 +162,41 @@ moon_test(
     ],
 );
 
+(my $life = Test::MockObject->new)->mock('arrayref', sub{ [ 'one', 'two', 'three' ] });
+
+moon_test(
+    name => 'Arrayref',
+    instance => $life,
+    instructions => [
+        {
+            test => 'ok',
+            func => 'arrayref',
+            subtest => [
+                {
+                    test => 'count_ref',
+                    expected => 3,
+                },
+                {
+                    test => 'ref_index_scalar',
+                    index => 0,
+                    expected => 'one',
+                },
+                {
+                    test => 'ref_index_scalar',
+                    index => 1,
+                    expected => 'two',
+                },
+                {
+                    test => 'ref_index_scalar',
+                    index => 2,
+                    expected => 'three',
+                },
+            ]
+        }
+    ]
+
+);
+
 check_tests(
     sub {
         moon_test(
@@ -484,6 +519,6 @@ check_tests(
     "moon_test test"
 );
 
-sunrise( 82, touchy);
+sunrise( 89, touchy);
 
 1;

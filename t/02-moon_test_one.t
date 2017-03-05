@@ -849,7 +849,7 @@ check_test(
 check_test(
     sub {
         moon_test_one(
-            test => 'ref_count',
+            test => 'count_ref',
             instance => $instance,
             func => 'ref_ind_obj',
             expected => 1,

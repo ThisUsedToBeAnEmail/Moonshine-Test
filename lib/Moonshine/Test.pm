@@ -27,11 +27,11 @@ Moonshine::Test - Test!
 
 =head1 VERSION
 
-Version 0.12
+Version 0.13
 
 =cut
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 =head1 SYNOPSIS
 
@@ -151,6 +151,10 @@ moon_test_one can currently run the following tests.
 =item list_index_obj - isa_ok - ''
 
 =item list_index_like - like - ''
+
+=item count - is - ''
+
+=item count_ref - is - ''
 
 =item skip - ok(1)
 
@@ -412,7 +416,7 @@ sub moon_test_one {
 "$test_name is list - count - is - $expected[0]"
               );
         }
-        when ('ref_count') {
+        when ('count_ref') {
              return is(
                 scalar @{ $test[0] },
                 $expected[0],
