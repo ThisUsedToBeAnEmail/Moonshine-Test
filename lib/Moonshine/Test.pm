@@ -408,6 +408,12 @@ sub moon_test_one {
                 expected => $expected[0],
             );
         }
+        when ('ok') {
+            return ok($test[0], "$test_name is ok");
+        }
+        when ('skip') {
+            return ok(1, "$test_name - skip");
+        }
         default {
             ok(0);
             diag "Unknown instruction{test}: $_ passed to moon_test_one";

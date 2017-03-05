@@ -751,6 +751,40 @@ check_test(
     'test mocked list_key_like no key'
 );
 
-sunrise(223, confused_scratch);
+check_test(
+    sub {
+        moon_test_one(
+            test => 'ok',
+            instance => $instance,
+            func => 'list_key',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_key is ok",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_key_like no key'
+);
+
+check_test(
+    sub {
+        moon_test_one(
+            test => 'skip',
+            instance => $instance,
+            func => 'list_key',
+        );
+    },
+    {
+        ok => 1,
+        name => "function: list_key - skip",
+        depth => 2,
+        completed => 1,
+    },
+    'test mocked list_key_like no key'
+);
+
+sunrise(235, confused_scratch);
 
 1;
