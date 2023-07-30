@@ -18,9 +18,6 @@ our %EXPORT_TAGS = (
     emo     => [@EMO],
 );
 
-use feature qw/switch/;
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
-
 =head1 NAME
 
 Moonshine::Test - Test!
@@ -242,233 +239,232 @@ sub moon_test_one {
         return;
     }
 
-    given ( $instruction{test} ) {
-        when ('ref') {
-            return is_deeply( $test[0], $expected[0],
-                "$test_name is ref - is_deeply" );
-        }
-        when ('ref_key_scalar') {
-            return exists $instruction{key}
-              ? is(
-                $test[0]->{ $instruction{key} },
-                $expected[0],
+    my $type = $instruction{test};
+    if ($type eq 'ref') {
+        return is_deeply( $test[0], $expected[0],
+            "$test_name is ref - is_deeply" );
+    }
+    elsif ($type eq 'ref_key_scalar') {
+        return exists $instruction{key}
+          ? is(
+            $test[0]->{ $instruction{key} },
+            $expected[0],
 "$test_name is ref - has scalar key: $instruction{key} - is - $expected[0]"
-              )
-              : ok(
-                0,
-                "No key passed to test - ref_key_scalar - testing - $test_name"
-              );
-        }
-        when ('ref_key_like') {
-            return exists $instruction{key}
-              ? like(
-                $test[0]->{ $instruction{key} },
-                qr/$expected[0]/,
+          )
+          : ok(
+            0,
+            "No key passed to test - ref_key_scalar - testing - $test_name"
+          );
+    }
+    elsif ($type eq 'ref_key_like') {
+        return exists $instruction{key}
+          ? like(
+            $test[0]->{ $instruction{key} },
+            qr/$expected[0]/,
 "$test_name is ref - has scalar key: $instruction{key} - like - $expected[0]"
-              )
-              : ok( 0,
-                "No key passed to test - ref_key_like - testing - $test_name" );
-        }
-        when ('ref_key_ref') {
-            return exists $instruction{key}
-              ? is_deeply(
-                $test[0]->{ $instruction{key} },
-                $expected[0],
+          )
+          : ok( 0,
+            "No key passed to test - ref_key_like - testing - $test_name" );
+    }
+    elsif ($type eq 'ref_key_ref') {
+        return exists $instruction{key}
+          ? is_deeply(
+            $test[0]->{ $instruction{key} },
+            $expected[0],
 "$test_name is ref - has ref key: $instruction{key} - is_deeply - ref"
-              )
-              : ok( 0,
-                "No key passed to test - ref_key_ref - testing - $test_name" );
-        }
-        when ('ref_index_scalar') {
-            return exists $instruction{index}
-              ? is(
-                $test[0]->[ $instruction{index} ],
-                $expected[0],
+          )
+          : ok( 0,
+            "No key passed to test - ref_key_ref - testing - $test_name" );
+    }
+    elsif ($type eq 'ref_index_scalar') {
+        return exists $instruction{index}
+          ? is(
+            $test[0]->[ $instruction{index} ],
+            $expected[0],
 "$test_name is ref - has scalar index: $instruction{index} - is - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - ref_index_scalar - testing - $test_name"
-              );
-        }
-        when ('ref_index_ref') {
-            return exists $instruction{index}
-              ? is_deeply(
-                $test[0]->[ $instruction{index} ],
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'ref_index_ref') {
+        return exists $instruction{index}
+          ? is_deeply(
+            $test[0]->[ $instruction{index} ],
+            $expected[0],
 "$test_name is ref - has ref index: $instruction{index} - is_deeply - ref"
-              )
-              : ok(
-                0,
-                "No index passed to test - ref_index_ref - testing - $test_name"
-              );
-        }
-        when ('ref_index_like') {
-            return exists $instruction{index}
-              ? like(
-                $test[0]->[ $instruction{index} ],
-                qr/$expected[0]/,
+          )
+          : ok(
+            0,
+            "No index passed to test - ref_index_ref - testing - $test_name"
+          );
+    }
+    elsif ($type eq 'ref_index_like') {
+        return exists $instruction{index}
+          ? like(
+            $test[0]->[ $instruction{index} ],
+            qr/$expected[0]/,
 "$test_name is ref - has scalar index: $instruction{index} - like - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - ref_index_like - testing - $test_name"
-              );
-        }
-        when ('ref_index_obj') {
-            return exists $instruction{index}
-              ? isa_ok(
-                $test[0]->[ $instruction{index} ],
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'ref_index_obj') {
+        return exists $instruction{index}
+          ? isa_ok(
+            $test[0]->[ $instruction{index} ],
+            $expected[0],
 "$test_name is ref - has obj index: $instruction{index} - isa_ok - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - ref_index_obj - testing - $test_name"
-              );
-        }
-        when ('list_index_scalar') {
-            return exists $instruction{index}
-              ? is(
-                $test[ $instruction{index} ],
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'list_index_scalar') {
+        return exists $instruction{index}
+          ? is(
+            $test[ $instruction{index} ],
+            $expected[0],
 "$test_name is list - has scalar index: $instruction{index} - is - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - list_index_scalar - testing - $test_name"
-              );
-        }
-        when ('list_index_ref') {
-            return exists $instruction{index}
-              ? is_deeply(
-                $test[ $instruction{index} ],
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'list_index_ref') {
+        return exists $instruction{index}
+          ? is_deeply(
+            $test[ $instruction{index} ],
+            $expected[0],
 "$test_name is list - has ref index: $instruction{index} - is_deeply - ref"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - list_index_ref - testing - $test_name"
-              );
-        }
-        when ('list_index_like') {
-            return exists $instruction{index}
-              ? like(
-                $test[ $instruction{index} ],
-                qr/$expected[0]/,
+          );
+    }
+    elsif ($type eq 'list_index_like') {
+        return exists $instruction{index}
+          ? like(
+            $test[ $instruction{index} ],
+            qr/$expected[0]/,
 "$test_name is list - has scalar index: $instruction{index} - like - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - list_index_like - testing - $test_name"
-              );
-        }
-        when ('list_index_obj') {
-             return exists $instruction{index}
-              ? isa_ok(
-                $test[ $instruction{index} ],
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'list_index_obj') {
+          return exists $instruction{index}
+          ? isa_ok(
+            $test[ $instruction{index} ],
+            $expected[0],
 "$test_name is list - has obj index: $instruction{index} - isa_ok - $expected[0]"
-              )
-              : ok(
-                0,
+          )
+          : ok(
+            0,
 "No index passed to test - list_index_obj - testing - $test_name"
-              );
-        }
-        when ('list_key_scalar') {
-            return exists $instruction{key}
-              ? is(
-                {@test}->{ $instruction{key} },
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'list_key_scalar') {
+        return exists $instruction{key}
+          ? is(
+            {@test}->{ $instruction{key} },
+            $expected[0],
 "$test_name is list - has scalar key: $instruction{key} - is - $expected[0]"
-              )
-              : ok(
-                0,
-                "No key passed to test - list_key_scalar - testing - $test_name"
-              );
-        }
-        when ('list_key_ref') {
-            return exists $instruction{key}
-              ? is_deeply(
-                {@test}->{ $instruction{key} },
-                $expected[0],
+          )
+          : ok(
+            0,
+            "No key passed to test - list_key_scalar - testing - $test_name"
+          );
+    }
+    elsif ($type eq 'list_key_ref') {
+        return exists $instruction{key}
+          ? is_deeply(
+            {@test}->{ $instruction{key} },
+            $expected[0],
 "$test_name is list - has ref key: $instruction{key} - is_deeply - ref"
-              )
-              : ok( 0,
-                "No key passed to test - list_key_ref - testing - $test_name" );
-        }
-        when ('list_key_like') {
-            return exists $instruction{key}
-              ? like(
-                {@test}->{ $instruction{key} },
-                qr/$expected[0]/,
+          )
+          : ok( 0,
+            "No key passed to test - list_key_ref - testing - $test_name" );
+    }
+    elsif ($type eq 'list_key_like') {
+        return exists $instruction{key}
+          ? like(
+            {@test}->{ $instruction{key} },
+            qr/$expected[0]/,
 "$test_name is list - has scalar key: $instruction{key} - like - $expected[0]"
-              )
-              : ok(
-                0,
-                "No key passed to test - list_key_like - testing - $test_name"
-              );
-        }
-        when ('count') {
-             return is(
-                scalar @test,
-                $expected[0],
+          )
+          : ok(
+            0,
+            "No key passed to test - list_key_like - testing - $test_name"
+          );
+    }
+    elsif ($type eq 'count') {
+          return is(
+            scalar @test,
+            $expected[0],
 "$test_name is list - count - is - $expected[0]"
-              );
-        }
-        when ('count_ref') {
-             return is(
-                scalar @{ $test[0] },
-                $expected[0],
+          );
+    }
+    elsif ($type eq 'count_ref') {
+          return is(
+            scalar @{ $test[0] },
+            $expected[0],
 "$test_name is ref - count - is - $expected[0]"
-              );
-        }
-        when ('scalar') {
-            return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
-                $test_name, defined $expected[0] ? $expected[0] : 'undef' );
-        }
-        when ('hash') {
-            return is_deeply( {@test}, $expected[0],
-                "$test_name is hash - reference - is_deeply" );
-        }
-        when ('array') {
-            return is_deeply( \@test, $expected[0],
-                "$test_name is array - reference - is_deeply" );
-        }
-        when ('obj') {
-            return isa_ok( $test[0], $expected[0],
-                "$test_name is Object - blessed - is - $expected[0]" );
-        }
-        when ('like') {
-            return like( $test[0], qr/$expected[0]/,
-                "$test_name is like - $expected[0]" );
-        }
-        when ('true') {
-            return is( $test[0], 1, "$test_name is true - 1" );
-        }
-        when ('false') {
-            return is( $test[0], 0, "$test_name is false - 0" );
-        }
-        when ('undef') {
-            return is( $test[0], undef, "$test_name is undef" );
-        }
-        when ('render') {
-            return render_me(
-                instance => $test[0],
-                expected => $expected[0],
-            );
-        }
-        when ('ok') {
-            return ok(@test, "$test_name is ok");
-        }
-        when ('skip') {
-            return ok(1, "$test_name - skip");
-        }
-        default {
-            ok(0);
-            diag "Unknown instruction{test}: $_ passed to moon_test_one";
-            return;
-        }
+          );
+    }
+    elsif ($type eq 'scalar') {
+        return is( $test[0], $expected[0], sprintf "%s is scalar - is - %s",
+            $test_name, defined $expected[0] ? $expected[0] : 'undef' );
+    }
+    elsif ($type eq 'hash') {
+        return is_deeply( {@test}, $expected[0],
+            "$test_name is hash - reference - is_deeply" );
+    }
+    elsif ($type eq 'array') {
+        return is_deeply( \@test, $expected[0],
+            "$test_name is array - reference - is_deeply" );
+    }
+    elsif ($type eq 'obj') {
+        return isa_ok( $test[0], $expected[0],
+            "$test_name is Object - blessed - is - $expected[0]" );
+    }
+    elsif ($type eq 'like') {
+        return like( $test[0], qr/$expected[0]/,
+            "$test_name is like - $expected[0]" );
+    }
+    elsif ($type eq 'true') {
+        return is( $test[0], 1, "$test_name is true - 1" );
+    }
+    elsif ($type eq 'false') {
+        return is( $test[0], 0, "$test_name is false - 0" );
+    }
+    elsif ($type eq 'undef') {
+        return is( $test[0], undef, "$test_name is undef" );
+    }
+    elsif ($type eq 'render') {
+        return render_me(
+            instance => $test[0],
+            expected => $expected[0],
+        );
+    }
+    elsif ($type eq 'ok') {
+        return ok(@test, "$test_name is ok");
+    }
+    elsif ($type eq 'skip') {
+        return ok(1, "$test_name - skip");
+    }
+    else {
+        ok(0);
+        diag "Unknown instruction{test}: $_ passed to moon_test_one";
+        return;
     }
 }
 
